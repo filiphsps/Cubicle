@@ -44,6 +44,7 @@ jobs:
         uses: CyberAndrii/steam-totp@v1
         with:
           shared_secret: ${{ secrets.STEAM_SHARED_SECRET }}
+          time_offset: 60
 
       - name: Publish
         uses: game-ci/steam-deploy@v2
