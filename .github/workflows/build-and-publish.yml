@@ -39,14 +39,18 @@ jobs:
           name: win64
           path: bin/Release/net7.0
 
+      - name: Generate auth code
+        id: generate
+        uses: CyberAndrii/steam-totp@v1
+        with:
+          shared_secret: ${{ secrets.STEAM_SHARED_SECRET }}
+
       - name: Publish
         uses: game-ci/steam-deploy@v2
         with:
           username: ${{ secrets.STEAM_USERNAME }}
           password: ${{ secrets.STEAM_PASSWORD }}
-          configVdf: ${{ secrets.CONFIG_VDF }}
-          ssfnFileName: ${{ secrets.STEAM_SSFN_FILE_NAME }}
-          ssfnFileContents: ${{ secrets.STEAM_SSFN_FILE_CONTENTS }}
+          totp: ${{ steps.generate.outputs.code }}
           appId: 1882990
           buildDescription: Automatic build.
           rootPath: bin
