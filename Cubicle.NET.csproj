@@ -14,6 +14,8 @@
   <ItemGroup>
     <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
     <PackageReference Include="Silk.NET" Version="2.17.1" />
+    <PackageReference Include="Silk.NET.OpenGL.Extensions.ImGui" Version="2.17.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup>

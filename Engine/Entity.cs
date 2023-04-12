@@ -9,8 +9,8 @@ namespace Cubicle.NET.Engine
     
     public class Entity
     {
-        public Mesh Mesh { get; private set; }
-        public Shader Shader { get; private set; }
+        public Mesh Mesh;
+        public Shader Shader;
 
         public Vector3D<float> Position;
         public Vector3D<float> Velocity;

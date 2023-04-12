@@ -5,6 +5,7 @@ using Cubicle.NET.Engine;
 using Silk.NET.Input;
 using Cubicle.NET.Util;
 using Cubicle.NET.Engine.Rendering;
+using Cubicle.NET.Debug;
 
 namespace Cubicle.NET
 {
@@ -13,14 +14,15 @@ namespace Cubicle.NET
         private Input input;
         private Renderer? renderer;
         private Steam steam;
+        private DebugScreen? debug;
 
         private IWindow window;
+        private IInputContext input_context;
         private GL? gl;
 
         public Cubicle()
         {
             window = Window.Create(WindowOptions.Default with {
-                //Position = new Vector2D<int>(800, 600),
                 Size = new Vector2D<int>(800, 600),
                 Title = "Cubicle",
                 WindowBorder = WindowBorder.Fixed
@@ -32,7 +34,8 @@ namespace Cubicle.NET
 
             window.Initialize();
 
-            input = new Input(window.CreateInput());
+            input_context = window.CreateInput();
+            input = new Input(input_context);
             steam = new Steam();
         }
 
@@ -44,19 +47,25 @@ namespace Cubicle.NET
 
         private void OnLoad()
         {
-            gl = window.CreateOpenGL();
+            gl = GL.GetApi(window);
             renderer = new Renderer(gl);
         }
 
         private void OnUpdate(double delta)
         {
+            if (debug == null) {
+                debug = new DebugScreen(gl, window, input_context);
+            }
+
             input.Update(delta);
             renderer?.Update(delta);
+            debug?.Update(delta);
         }
 
         private void OnRender(double delta)
         {
             renderer?.Render(delta);
+            debug?.Render(delta);
         }
     }
 }

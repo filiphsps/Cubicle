@@ -11,7 +11,11 @@ namespace Cubicle.NET.Engine
         public float CameraRotationX;
         public float CameraRotationY;
 
-        public Player()
+        public Player() : base()
+        {
+        }
+
+        public Player(GL gl, string vertex, string fragment, float[] meshVertices) : base(gl, vertex, fragment, meshVertices)
         {
         }
 
