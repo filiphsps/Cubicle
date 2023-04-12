@@ -38,14 +38,14 @@ namespace Cubicle.NET.Engine.Rendering
                     buf,
                     BufferUsageARB.StaticDraw);
                 gl.EnableVertexAttribArray(0);
-                gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, true, 0, null);
+                gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, true, 0, (void*)0);
             }
         }
 
         public void Draw()
         {
             gl.BindVertexArray(VAO);
-            gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)Verticies.Count);
+            gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)Verticies!.Count);
         }
     }
 }

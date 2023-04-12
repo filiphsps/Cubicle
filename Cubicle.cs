@@ -20,8 +20,10 @@ namespace Cubicle.NET
         public Cubicle()
         {
             window = Window.Create(WindowOptions.Default with {
-                Position = new Vector2D<int>(800, 600),
-                Title = "Cubicle"
+                //Position = new Vector2D<int>(800, 600),
+                Size = new Vector2D<int>(800, 600),
+                Title = "Cubicle",
+                WindowBorder = WindowBorder.Fixed
             });
 
             window.Load += OnLoad;
@@ -46,15 +48,15 @@ namespace Cubicle.NET
             renderer = new Renderer(gl);
         }
 
-        private void OnUpdate(double a)
+        private void OnUpdate(double delta)
         {
-            input.Update();
-            renderer?.Update();
+            input.Update(delta);
+            renderer?.Update(delta);
         }
 
-        private void OnRender(double a)
+        private void OnRender(double delta)
         {
-            renderer?.Render();
+            renderer?.Render(delta);
         }
     }
 }

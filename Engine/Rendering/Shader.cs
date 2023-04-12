@@ -1,4 +1,5 @@
-﻿using Silk.NET.OpenGL;
+﻿using Cubicle.NET.Util;
+using Silk.NET.OpenGL;
 
 namespace Cubicle.NET.Engine.Rendering
 {
@@ -8,6 +9,7 @@ namespace Cubicle.NET.Engine.Rendering
         //Most of the time you would want to abstract items to make things like this invisible.
         private uint _handle;
         private GL _gl;
+        private int _mat;
 
         public Shader(GL gl, string vertexPath, string fragmentPath)
         {
@@ -18,16 +20,21 @@ namespace Cubicle.NET.Engine.Rendering
             uint fragment = LoadShader(ShaderType.FragmentShader, "./Res/Shaders/" + fragmentPath);
             //Create the shader program.
             _handle = _gl.CreateProgram();
+
             //Attach the individual shaders.
             _gl.AttachShader(_handle, vertex);
             _gl.AttachShader(_handle, fragment);
             _gl.LinkProgram(_handle);
+
             //Check for linking errors.
             _gl.GetProgram(_handle, GLEnum.LinkStatus, out var status);
             if (status == 0)
             {
                 throw new Exception($"Program failed to link with error: {_gl.GetProgramInfoLog(_handle)}");
             }
+
+            _mat = _gl.GetUniformLocation(_handle, "mvp");
+
             //Detach and delete the shaders
             _gl.DetachShader(_handle, vertex);
             _gl.DetachShader(_handle, fragment);
@@ -61,6 +68,11 @@ namespace Cubicle.NET.Engine.Rendering
                 throw new Exception($"{name} uniform not found on shader.");
             }
             _gl.Uniform1(location, value);
+        }
+
+        public void SetMatrix(Matrix4 mat)
+        {
+            _gl.UniformMatrix4(_mat, 1, true, mat.M);
         }
 
         public void Dispose()

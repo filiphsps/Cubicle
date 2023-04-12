@@ -1,6 +1,9 @@
 ﻿using Cubicle.NET.Util;
 using Silk.NET.OpenGL;
 using Silk.NET.Maths;
+using System.Drawing;
+using System;
+using Silk.NET.Input;
 
 namespace Cubicle.NET.Engine.Rendering
 {
@@ -8,27 +11,90 @@ namespace Cubicle.NET.Engine.Rendering
     {
         private GL gl;
 
-        private Shader shader;
+        public static Player player;
+        private Entity entity;
+        private Camera camera;
 
         public unsafe Renderer(GL gl)
         {
             this.gl = gl;
 
-            shader = new Shader(gl, "test.vert", "test.frag");
+
+            camera = new Camera(gl);
+
+            float[] vertices =
+            {
+                // Front face - 2 triangles
+                -1.0f,  1.0f, -1.0f,
+                 1.0f,  1.0f, -1.0f,
+                -1.0f, -1.0f, -1.0f,
+                -1.0f, -1.0f, -1.0f,
+                 1.0f,  1.0f, -1.0f,
+                 1.0f, -1.0f, -1.0f,
+
+                // Top Face
+                -1.0f,  1.0f,  1.0f,
+                 1.0f,  1.0f,  1.0f,
+                -1.0f,  1.0f, -1.0f,
+                -1.0f,  1.0f, -1.0f,
+                 1.0f,  1.0f,  1.0f,
+                 1.0f,  1.0f, -1.0f,
+            
+                // Right Face
+                 1.0f,  1.0f, -1.0f,
+                 1.0f,  1.0f,  1.0f,
+                 1.0f, -1.0f, -1.0f,
+                 1.0f, -1.0f, -1.0f,
+                 1.0f,  1.0f,  1.0f,
+                 1.0f, -1.0f,  1.0f,
+            
+                // Bottom Face
+                -1.0f, -1.0f,  1.0f,
+                 1.0f, -1.0f,  1.0f,
+                -1.0f, -1.0f, -1.0f,
+                -1.0f, -1.0f, -1.0f,
+                 1.0f, -1.0f,  1.0f,
+                 1.0f, -1.0f, -1.0f,
+            
+                // Back Face
+                 1.0f,  1.0f,  1.0f,
+                -1.0f,  1.0f,  1.0f,
+                 1.0f, -1.0f,  1.0f,
+                 1.0f, -1.0f,  1.0f,
+                -1.0f,  1.0f,  1.0f,
+                -1.0f, -1.0f,  1.0f,
+            
+                // Left Face
+                -1.0f,  1.0f,  1.0f,
+                -1.0f,  1.0f, -1.0f,
+                -1.0f, -1.0f,  1.0f,
+                -1.0f, -1.0f,  1.0f,
+                -1.0f,  1.0f, -1.0f,
+                -1.0f, -1.0f, -1.0f,
+            };
+
+            player = new Player();
+
+            entity = new Entity(gl, "test.vert", "test.frag", vertices);
+            entity.Position = new Vector3D<float>(0, 0.5f, -5.0f);
         }
 
-        public override void Update()
+        public override void Update(double delta)
         {
         }
 
-        public unsafe void Render()
+        public unsafe void Render(double delta)
         {
-            gl.Clear(ClearBufferMask.ColorBufferBit);
+            gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            gl.ClearColor(0.2f, 0.2f, 0.8f, 1.0f);
 
-            shader.Use();
-            //shader.SetUniform("uBlue", (float)Math.Sin(DateTime.Now.Millisecond / 100f * Math.PI));
+            camera.Worldview = player.WorldToCamera();
+            camera.SetSize(800, 600, 0.01f, 100.0f, 65.0f);
+            camera.UseViewport();
 
-            //gl.DrawElements(PrimitiveType.Triangles, (uint)Indices.Length, DrawElementsType.UnsignedInt, null);
+            player.Update(delta);
+
+            entity.Draw(camera);
         }
     }
 }

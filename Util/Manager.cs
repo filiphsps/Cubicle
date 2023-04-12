@@ -8,6 +8,6 @@ namespace Cubicle.NET.Util
 {
     public abstract class Manager
     {
-        public abstract void Update();
+        public abstract void Update(double delta);
     }
 }
