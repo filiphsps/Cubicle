@@ -1,12 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <StartupObject>Program</StartupObject>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x64</PlatformTarget>
+    <ApplicationIcon>Res\Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +18,7 @@
 
   <ItemGroup>
 	  <None Include="$(SolutionDir)Res\**" CopyToOutputDirectory="PreserveNewest" LinkBase="Res\" />
+	  <Content Include="Res\Icon.ico" />
 	  <None Include="$(SolutionDir)steam_api.dll" CopyToOutputDirectory="PreserveNewest" Link=".\steam_api.dll" />
 	  <None Include="$(SolutionDir)steam_api64.dll" CopyToOutputDirectory="PreserveNewest" Link=".\steam_api64.dll" />
   </ItemGroup>
