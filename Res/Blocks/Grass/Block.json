@@ -1,0 +1,11 @@
+{
+    "name": "Grass",
+    "textures": {
+        "top": "top.png",
+        "front": "side.png",
+        "right": "side.png",
+        "back": "side.png",
+        "left": "side.png",
+        "bottom": "bottom.png"
+    }
+}
