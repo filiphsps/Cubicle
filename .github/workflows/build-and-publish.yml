@@ -41,10 +41,10 @@ jobs:
 
       - name: Generate auth code
         id: generate
-        uses: CyberAndrii/steam-totp@v1
+        uses: CyberAndrii/steam-totp@master
         with:
           shared_secret: ${{ secrets.STEAM_SHARED_SECRET }}
-          time_offset: 60
+          time_offset: 15
 
       - name: Publish
         uses: game-ci/steam-deploy@v2
