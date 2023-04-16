@@ -26,7 +26,6 @@ namespace Cubicle.NET.Engine
         {
             Ray.Position = PerspectivePosition();
             Ray.Direction = Direction;
-            MinDistanceToTarget = 7.5f;
         }
 
         public override Vector3 PerspectivePosition()

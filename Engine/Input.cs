@@ -137,6 +137,9 @@ namespace Cubicle.NET.Engine
                 Cubicle.Player.Direction.Y = MathF.Sin(MathHelper.DegreesToRadians(Cubicle.Player.Pitch));
                 Cubicle.Player.Direction.Z = MathF.Sin(MathHelper.DegreesToRadians(Cubicle.Player.Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Cubicle.Player.Pitch));
                 Cubicle.Player.Front = Vector3.Normalize(Cubicle.Player.Direction);
+
+                // TODO: Move this into player
+                Cubicle.Player.MinDistanceToTarget = 7.5f;
             }
         }
     }

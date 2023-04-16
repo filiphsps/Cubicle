@@ -33,7 +33,7 @@ namespace Cubicle.NET
                 Size = new Vector2D<int>(800, 600),
                 Title = "Cubicle",
                 WindowBorder = WindowBorder.Fixed,
-                VSync = false,
+                VSync = true,
             });
 
             Window.Load += OnLoad;

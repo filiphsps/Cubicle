@@ -46,16 +46,16 @@ namespace Cubicle.NET.Engine
 
         public override void Draw(double delta, Rendering.Camera camera)
         {
+            // Don't draw encased blocks
+            if (Encased)
+                return;
+
             float? rayBlockDistance = Cubicle.Player.Ray.Intersects(Position, Position + new Vector3(1f, 1f, 1f));
             if (rayBlockDistance != null && rayBlockDistance < Cubicle.Player.MinDistanceToTarget)
             {
                 Cubicle.Player.MinDistanceToTarget = (float)rayBlockDistance;
                 Cubicle.Player.Target = Position;
             }
-
-            // Don't draw encased blocks
-            if (Encased)
-                return;
 
             Texture.Bind();
             Rendering.Renderer.BlockShader.Use();
@@ -78,6 +78,10 @@ namespace Cubicle.NET.Engine
                 Rendering.Renderer.BlockShader.SetUniform("uModel", model);
                 Rendering.Renderer.BlockShader.SetUniform("uView", view);
                 Rendering.Renderer.BlockShader.SetUniform("uProjection", projection);
+                Rendering.Renderer.BlockShader.SetUniform("uHighlight", new Vector4(0, 0, 0, 0));
+
+                if (Cubicle.Player.Target == Position)
+                    Rendering.Renderer.BlockShader.SetUniform("uHighlight", new Vector4(0.15f, 0.15f, 0.15f, 1f));
 
                 gl.DrawArrays(Silk.NET.OpenGL.PrimitiveType.Triangles, 0, (uint)mesh.Vertices.Length);
             }

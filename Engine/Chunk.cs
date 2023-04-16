@@ -15,7 +15,7 @@ namespace Cubicle.NET.Engine
         public Chunk(GL gl, Vector3 position)
         {
             Position = position;
-
+             
             for (var x = 0; x < 16; x++)
             {
                 for (var y = 0; y < 4; y++)
@@ -40,6 +40,8 @@ namespace Cubicle.NET.Engine
 
         private void Calculate()
         {
+            return;
+
             foreach (var block in blocks.Values)
             {
                 // TODO: Do this properly.
