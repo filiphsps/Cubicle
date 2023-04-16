@@ -24,8 +24,21 @@ namespace Cubicle.NET.Engine
 
         public void Update(double delta)
         {
+            MinDistanceToTarget = 7.5f;
+            Target = null;
             Ray.Position = PerspectivePosition();
             Ray.Direction = Direction;
+
+            foreach (var block in Renderer.chunk.Blocks.Values)
+            {
+                float? rayBlockDistance = Cubicle.Player.Ray.Intersects(block.Position, block.Position + new Vector3(1f, 1f, 1f));
+                if (rayBlockDistance != null && rayBlockDistance < Cubicle.Player.MinDistanceToTarget)
+                {
+                    Cubicle.Player.MinDistanceToTarget = (float)rayBlockDistance;
+                    Cubicle.Player.Target = block.Position;
+                }
+            }
+            
         }
 
         public override Vector3 PerspectivePosition()

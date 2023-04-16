@@ -50,13 +50,6 @@ namespace Cubicle.NET.Engine
             if (Encased)
                 return;
 
-            float? rayBlockDistance = Cubicle.Player.Ray.Intersects(Position, Position + new Vector3(1f, 1f, 1f));
-            if (rayBlockDistance != null && rayBlockDistance < Cubicle.Player.MinDistanceToTarget)
-            {
-                Cubicle.Player.MinDistanceToTarget = (float)rayBlockDistance;
-                Cubicle.Player.Target = Position;
-            }
-
             Texture.Bind();
             Rendering.Renderer.BlockShader.Use();
             Rendering.Renderer.BlockShader.SetUniform("uTexture0", 0);

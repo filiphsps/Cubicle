@@ -27,11 +27,6 @@ namespace Cubicle.NET.Engine
 
         private void OnMouseClick(IMouse mouse, MouseButton button, Vector2 arg3)
         {
-            if (Cubicle.Player.Target == null)
-                return;
-
-            if (button == MouseButton.Left)
-                Renderer.chunk.RemoveBlock((Vector3)Cubicle.Player.Target);
         }
 
         private void KeyDown(IKeyboard keyboard, Key key, int arg3)
@@ -106,6 +101,19 @@ namespace Cubicle.NET.Engine
             if (primaryKeyboard.IsKeyPressed(Key.ShiftLeft))
             {
                 Cubicle.Player.Position.Y -= moveSpeed;
+            }
+
+            var primaryMouse = inputContext.Mice.FirstOrDefault();
+            if (primaryMouse == null)
+                return;
+
+            // Limit speed of breaking through cooldown
+            if (Cubicle.Player.Target != null)
+            {
+                if (primaryMouse.IsButtonPressed(MouseButton.Left))
+                {
+                    Renderer.chunk.RemoveBlock((Vector3)Cubicle.Player.Target);
+                }
             }
         }
 

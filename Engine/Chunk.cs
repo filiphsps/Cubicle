@@ -9,7 +9,7 @@ namespace Cubicle.NET.Engine
     public class Chunk
     {
         // FIXME: Migrate to actual block-class so we can combine meshes
-        private Dictionary<Vector3, Block> blocks = new Dictionary<Vector3, Block>();
+        public Dictionary<Vector3, Block> Blocks = new Dictionary<Vector3, Block>();
         public Vector3 Position;
 
         public Chunk(GL gl, Vector3 position)
@@ -30,7 +30,7 @@ namespace Cubicle.NET.Engine
                         var block = new Block(gl, id);
                         block.Position = new Vector3(x, y, z);
                         block.Chunk = this;
-                        blocks.Add(block.Position, block);
+                        Blocks.Add(block.Position, block);
                     }
                 }
             }
@@ -40,9 +40,7 @@ namespace Cubicle.NET.Engine
 
         private void Calculate()
         {
-            return;
-
-            foreach (var block in blocks.Values)
+            foreach (var block in Blocks.Values)
             {
                 // TODO: Do this properly.
                 block.CheckEncased();
@@ -56,7 +54,7 @@ namespace Cubicle.NET.Engine
 
         public void Draw(double delta, Rendering.Camera camera)
         {
-            foreach (var block in blocks.Values)
+            foreach (var block in Blocks.Values)
             {
                 block.Draw(delta, camera);
             }
@@ -64,7 +62,7 @@ namespace Cubicle.NET.Engine
 
         public void RemoveBlock(Vector3 pos)
         {
-            blocks.Remove(pos);
+            Blocks.Remove(pos);
             Calculate();
         }
 
@@ -72,7 +70,7 @@ namespace Cubicle.NET.Engine
         {
             try
             {
-                return blocks[new Vector3(x, y, z)];
+                return Blocks[new Vector3(x, y, z)];
             }
             catch
             {
@@ -81,7 +79,7 @@ namespace Cubicle.NET.Engine
         }
         public bool IsBlock(float x, float y, float z)
         {
-            return blocks.ContainsKey(new Vector3(x, y, z));
+            return Blocks.ContainsKey(new Vector3(x, y, z));
         }
     }
 }
