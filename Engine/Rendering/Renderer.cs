@@ -1,6 +1,6 @@
 ﻿using Cubicle.NET.Util;
 using Silk.NET.OpenGL;
-using Silk.NET.Maths;
+using System.Numerics;
 
 namespace Cubicle.NET.Engine.Rendering
 {
@@ -10,24 +10,31 @@ namespace Cubicle.NET.Engine.Rendering
 
         private Chunk chunk;
 
-        public static Player player;
         public static Camera Camera;
         public static Shader BlockShader;
+
+        public static Dictionary<String, Texture> Textures = new Dictionary<String, Texture>();
+        public static Dictionary<String, Model> Models = new Dictionary<String, Model>();
 
         public unsafe Renderer(GL gl)
         {
             this.gl = gl;
             BlockShader = new Rendering.Shader(gl, "Res/Shaders/block.vert", "Res/Shaders/block.frag");
 
-
             Camera = new Camera(gl);
-
-            float[] player_vertices = { };
-            uint[] player_indices = { };
-
-            //player = new Player(gl, "scene.vert", "scene.frag", player_vertices, player_indices);
-            chunk = new Chunk(gl, new Vector3D<int>(0, 0, 0 ));
+            chunk = new Chunk(gl, new Vector3(0, 0, 0));
             
+        }
+
+        private bool wireframe = false;
+        public void ToggleWireframe()
+        {
+            wireframe = !wireframe;
+            if (wireframe)
+                gl.PolygonMode(TriangleFace.FrontAndBack, PolygonMode.Line);
+            else
+                gl.PolygonMode(TriangleFace.FrontAndBack, PolygonMode.Fill);
+
         }
 
         public override void Update(double delta)
@@ -38,9 +45,8 @@ namespace Cubicle.NET.Engine.Rendering
         public unsafe void Render(double delta)
         {
             gl.Enable(EnableCap.DepthTest);
-            gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             gl.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
+            gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             chunk.Draw(delta, Camera);
         }

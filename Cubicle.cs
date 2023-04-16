@@ -12,60 +12,65 @@ namespace Cubicle.NET
     public class Cubicle
     {
         private Input input;
-        private Renderer? renderer;
+        public static Renderer? Renderer;
         private Steam steam;
         private DebugScreen? debug;
 
-        private IWindow window;
+        public static IWindow Window;
         private IInputContext input_context;
         private GL? gl;
 
         public Cubicle()
         {
-            window = Window.Create(WindowOptions.Default with {
+            Window = Silk.NET.Windowing.Window.Create(WindowOptions.Default with {
                 Size = new Vector2D<int>(800, 600),
                 Title = "Cubicle",
                 WindowBorder = WindowBorder.Fixed,
-                VSync = true
+                VSync = false
             });
 
-            window.Load += OnLoad;
-            window.Update += OnUpdate;
-            window.Render += OnRender;
+            Window.Load += OnLoad;
+            Window.Update += OnUpdate;
+            Window.Render += OnRender;
 
-            window.Initialize();
+            Window.Initialize();
 
-            input_context = window.CreateInput();
+            input_context = Window.CreateInput();
             input = new Input(input_context);
             steam = new Steam();
         }
 
         public void Run()
         {
-            window.Run();
-            window.Dispose();
+            Window.Run();
+            Window.Dispose();
+        }
+
+        public static void Quit()
+        {
+            Window.Close();
         }
 
         private void OnLoad()
         {
-            gl = GL.GetApi(window);
-            renderer = new Renderer(gl);
+            gl = GL.GetApi(Window);
+            Renderer = new Renderer(gl);
         }
 
         private void OnUpdate(double delta)
         {
             if (debug == null) {
-                debug = new DebugScreen(gl, window, input_context);
+                debug = new DebugScreen(gl, Window, input_context);
             }
 
             input.Update(delta);
-            renderer?.Update(delta);
+            Renderer?.Update(delta);
             debug?.Update(delta);
         }
 
         private void OnRender(double delta)
         {
-            renderer?.Render(delta);
+            Renderer?.Render(delta);
             debug?.Render(delta);
         }
     }

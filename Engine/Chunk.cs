@@ -1,5 +1,5 @@
 ﻿using Cubicle.NET.Engine.Rendering;
-using Microsoft.VisualBasic;
+using Silk.NET.Assimp;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using System.Numerics;
@@ -9,24 +9,37 @@ namespace Cubicle.NET.Engine
     public class Chunk
     {
         // FIXME: Migrate to actual block-class so we can combine meshes
-        private List<Block> blocks = new List<Block>();
-        public Vector3D<int> Position;
+        private Dictionary<Vector3, Block> blocks = new Dictionary<Vector3, Block>();
+        public Vector3 Position;
 
-        public Chunk(GL gl, Vector3D<int> position)
+        public Chunk(GL gl, Vector3 position)
         {
             Position = position;
 
             for (var x = 0; x < 16; x++)
             {
-                for (var y = 0; y < 4; y++)
+                for (var y = 0; y < 16; y++)
                 {
                     for (var z = 0; z < 16; z++)
                     {
-                        var block = new Block(gl);
+                        var id = "Grass";
+
+                        if (y < 15)
+                            id = "Dirt";
+
+                        var block = new Block(gl, id);
                         block.Position = new Vector3(x, y, z);
-                        blocks.Add(block);
+                        block.Chunk = this;
+                        blocks.Add(block.Position, block);
                     }
                 }
+            }
+
+            foreach (var block in blocks.Values)
+            {
+                // TODO: Do this on block change
+                // TODO: Check other chunks
+                block.CheckEncased();
             }
         }
 
@@ -35,17 +48,24 @@ namespace Cubicle.NET.Engine
         }
 
 
-        public void Draw(double delta, Camera camera)
+        public void Draw(double delta, Rendering.Camera camera)
         {
-            foreach (var block in blocks)
+            foreach (var block in blocks.Values)
             {
                 block.Draw(delta, camera);
             }
         }
 
-        private void GenerateMesh()
+        public Block? GetBlock(float x, float y, float z)
         {
-            
+            try
+            {
+                return blocks[new Vector3(x, y, z)];
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

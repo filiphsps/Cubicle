@@ -44,7 +44,14 @@ namespace Cubicle.NET.Debug
 
             ImGui.GetWindowDrawList().AddText(new Vector2(5, 55),
                 0xFFffFFff,
-                $"Yaw: {Renderer.Camera.Yaw.ToString("0.00")}, Pitch: {Renderer.Camera.Pitch.ToString("0.00")}, Zoom: {Renderer.Camera.Zoom.ToString("0.00")}");
+                $"Yaw: {Renderer.Camera.Yaw.ToString("0.00")}, Pitch: {Renderer.Camera.Pitch.ToString("0.00")}, Zoom: {Renderer.Camera.Zoom.ToString("0.00")}, Speed: {Renderer.Camera.Speed.ToString("0.00")}");
+
+
+            ImGui.GetWindowDrawList().AddText(new Vector2(5, 535),
+                0xFFffFFff,
+                $"ESC - Quit\n" +
+                $"Q   - Wireframes\n" +
+                $"TAB - Toggle Captured Cursor");
         }
 
         public void Render(double delta)

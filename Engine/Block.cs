@@ -11,22 +11,43 @@ namespace Cubicle.NET.Engine
     {
         GL gl;
 
-        static Model? GenericModel;
+        public Chunk Chunk;
+        public bool Encased;
 
-        public Block(GL gl) : base()
+        public Block(GL gl, String id = "Grass") : base()
         {
             this.gl = gl;
+            var model = "Res/Models/Cube.obj";
+            var texture = $"Res/Blocks/{id}/Texture.png";
 
-            if (GenericModel == null)
-                GenericModel = new Rendering.Model(gl, "Res/Models/Cube.obj");
 
-            // TODO: Cache these properly
-            Texture = new Rendering.Texture(gl, "Res/Blocks/Grass/Texture.png");
-            Model = GenericModel;
+            if (!Rendering.Renderer.Models.ContainsKey(model))
+            {
+                Model = new Rendering.Model(gl, model);
+                Rendering.Renderer.Models.Add(model, Model);
+            }
+            else
+            {
+                Model = Rendering.Renderer.Models[model];
+            }
+
+            if (!Rendering.Renderer.Textures.ContainsKey(texture))
+            {
+                Texture = new Rendering.Texture(gl, texture);
+                Rendering.Renderer.Textures.Add(texture, Texture);
+            }
+            else
+            {
+                Texture = Rendering.Renderer.Textures[texture];
+            }
         }
 
         public override void Draw(double delta, Rendering.Camera camera)
         {
+            // Don't draw encased blocks
+            if (Encased)
+                return;
+
             Texture.Bind();
             Rendering.Renderer.BlockShader.Use();
             Rendering.Renderer.BlockShader.SetUniform("uTexture0", 0);
@@ -53,10 +74,39 @@ namespace Cubicle.NET.Engine
             }
         }
 
+        public void CheckEncased()
+        {
+            bool res = true;
+            var x = Position.X;
+            var y = Position.Y;
+            var z = Position.Z;
+
+            // Above
+            if (Chunk.GetBlock(x, y + 1, z) == null)
+                res = false;
+            // Bellow
+            else if (Chunk.GetBlock(x, y - 1, z) == null)
+                res = false;
+            // Front
+            else if (Chunk.GetBlock(x, y, z + 1) == null)
+                res = false;
+            // Behind
+            else if (Chunk.GetBlock(x, y, z - 1) == null)
+                res = false;
+            // Right
+            else if (Chunk.GetBlock(x + 1, y, z) == null)
+                res = false;
+            // Left
+            else if (Chunk.GetBlock(x - 1, y, z) == null)
+                res = false;
+
+            Encased = res;
+        }
+
         public override Matrix4x4 LocalToWorld()
         {
             return
-                Matrix4x4.CreateTranslation(Position * 0.5f + new Vector3(0.25f, 0, 0.25f)) *
+                Matrix4x4.CreateTranslation((Chunk.Position + Position) * 0.5f + new Vector3(0.25f, 0, 0.25f)) *
                 Matrix4x4.CreateRotationY(Euler.Y) *
                 Matrix4x4.CreateRotationX(Euler.X) *
                 Matrix4x4.CreateRotationZ(Euler.Z) *

@@ -15,6 +15,8 @@ namespace Cubicle.NET.Engine
         public Input(IInputContext inputContext)
         {
             this.inputContext = inputContext;
+            this.inputContext.Keyboards[0].KeyDown += KeyDown;
+
             for (int i = 0; i < this.inputContext.Mice.Count; i++)
             {
                 this.inputContext.Mice[i].Cursor.CursorMode = CursorMode.Raw;
@@ -22,9 +24,39 @@ namespace Cubicle.NET.Engine
             }
         }
 
+        private void KeyDown(IKeyboard keyboard, Key key, int arg3)
+        {
+            if (key == Key.Q)
+            {
+                Cubicle.Renderer.ToggleWireframe();
+            }
+
+            if (key == Key.Escape)
+            {
+                Cubicle.Quit();
+            }
+
+            if (key == Key.Tab)
+            {
+                if (this.inputContext.Mice[0].Cursor.CursorMode == CursorMode.Raw)
+                    this.inputContext.Mice[0].Cursor.CursorMode = CursorMode.Normal;
+                else
+                    this.inputContext.Mice[0].Cursor.CursorMode = CursorMode.Raw;
+            }
+
+            if (key == Key.Up)
+            {
+                Renderer.Camera.Speed += 2.5f;
+            }
+            if (key == Key.Down)
+            {
+                Renderer.Camera.Speed -= 2.5f;
+            }
+        }
+
         public override void Update(double delta)
         {
-            var moveSpeed = 2.5f * (float)delta;
+            var moveSpeed = Renderer.Camera.Speed * (float)delta;
 
             var primaryKeyboard = inputContext.Keyboards.FirstOrDefault();
             if (primaryKeyboard.IsKeyPressed(Key.W))
@@ -53,11 +85,20 @@ namespace Cubicle.NET.Engine
                 //Move right
                 Renderer.Camera.Position.Y +=  moveSpeed;
             }
+            if (primaryKeyboard.IsKeyPressed(Key.ShiftLeft))
+            {
+                //Move right
+                Renderer.Camera.Position.Y -= moveSpeed;
+            }
         }
 
         private static Vector2 LastMousePosition;
         private static unsafe void OnMouseMove(IMouse mouse, Vector2 position)
         {
+            // We should be able to look around when we aren't caputring the cursor
+            if (mouse.Cursor.CursorMode != CursorMode.Raw)
+                return;
+
             var lookSensitivity = 0.1f;
             if (LastMousePosition == default)
             {

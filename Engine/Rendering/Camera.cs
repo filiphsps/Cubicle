@@ -17,6 +17,7 @@ namespace Cubicle.NET.Engine.Rendering
         public float Yaw = -2f;
         public float Pitch = -25f;
         public float Zoom = 75f;
+        public float Speed = 5f;
 
         public Camera(GL gl)
         {
