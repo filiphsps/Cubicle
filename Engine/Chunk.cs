@@ -67,5 +67,9 @@ namespace Cubicle.NET.Engine
                 return null;
             }
         }
+        public bool IsBlock(float x, float y, float z)
+        {
+            return blocks.ContainsKey(new Vector3(x, y, z));
+        }
     }
 }

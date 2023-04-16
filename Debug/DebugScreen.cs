@@ -36,7 +36,7 @@ namespace Cubicle.NET.Debug
             var pos = Renderer.Camera.Position;
             ImGui.GetWindowDrawList().AddText(new Vector2(5, 5),
                 0xFFffFFff,
-                $"{(1 / delta).ToString("0.00")} FPS");
+                $"{(1 / delta).ToString("000.00")} FPS");
 
             ImGui.GetWindowDrawList().AddText(new Vector2(5, 30),
                 0xFFffFFff,

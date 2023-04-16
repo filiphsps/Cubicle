@@ -82,22 +82,22 @@ namespace Cubicle.NET.Engine
             var z = Position.Z;
 
             // Above
-            if (Chunk.GetBlock(x, y + 1, z) == null)
+            if (!Chunk.IsBlock(x, y + 1, z))
                 res = false;
             // Bellow
-            else if (Chunk.GetBlock(x, y - 1, z) == null)
+            else if (!Chunk.IsBlock(x, y - 1, z))
                 res = false;
             // Front
-            else if (Chunk.GetBlock(x, y, z + 1) == null)
+            else if (!Chunk.IsBlock(x, y, z + 1))
                 res = false;
             // Behind
-            else if (Chunk.GetBlock(x, y, z - 1) == null)
+            else if (!Chunk.IsBlock(x, y, z - 1))
                 res = false;
             // Right
-            else if (Chunk.GetBlock(x + 1, y, z) == null)
+            else if (!Chunk.IsBlock(x + 1, y, z))
                 res = false;
             // Left
-            else if (Chunk.GetBlock(x - 1, y, z) == null)
+            else if (!Chunk.IsBlock(x - 1, y, z))
                 res = false;
 
             Encased = res;

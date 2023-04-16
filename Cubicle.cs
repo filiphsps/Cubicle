@@ -6,13 +6,18 @@ using Silk.NET.Input;
 using Cubicle.NET.Util;
 using Cubicle.NET.Engine.Rendering;
 using Cubicle.NET.Debug;
+using Silk.NET.Core;
+using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
+using System.Runtime.InteropServices;
 
 namespace Cubicle.NET
 {
     public class Cubicle
     {
         private Input input;
-        public static Renderer? Renderer;
+        public static Engine.Rendering.Renderer? Renderer;
         private Steam steam;
         private DebugScreen? debug;
 
@@ -26,7 +31,7 @@ namespace Cubicle.NET
                 Size = new Vector2D<int>(800, 600),
                 Title = "Cubicle",
                 WindowBorder = WindowBorder.Fixed,
-                VSync = false
+                VSync = false,
             });
 
             Window.Load += OnLoad;
@@ -53,6 +58,14 @@ namespace Cubicle.NET
 
         private void OnLoad()
         {
+            var img = Image.Load<Rgba32>("Res/Icon.png");
+            var _IMemoryGroup = img.GetPixelMemoryGroup();
+            var _MemoryGroup = _IMemoryGroup.ToArray()[0];
+            var PixelData = MemoryMarshal.AsBytes(_MemoryGroup.Span).ToArray();
+
+            var icon = new RawImage(64, 64, new Memory<byte>(PixelData));
+            Window.SetWindowIcon(ref icon);
+
             gl = GL.GetApi(Window);
             Renderer = new Renderer(gl);
         }

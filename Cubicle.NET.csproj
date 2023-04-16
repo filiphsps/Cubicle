@@ -22,10 +22,7 @@
 
   <ItemGroup>
     <None Include="$(SolutionDir)Res\**" CopyToOutputDirectory="PreserveNewest" LinkBase="Res\" />
-    <Content Include="Res\Icon.ico" />
-    <None Include="$(SolutionDir)steam_api.dll" CopyToOutputDirectory="PreserveNewest"
-      Link=".\steam_api.dll" />
-    <None Include="$(SolutionDir)steam_api64.dll" CopyToOutputDirectory="PreserveNewest"
-      Link=".\steam_api64.dll" />
+    <None Include="$(SolutionDir)steam_api.dll" CopyToOutputDirectory="PreserveNewest" Link=".\steam_api.dll" />
+    <None Include="$(SolutionDir)steam_api64.dll" CopyToOutputDirectory="PreserveNewest" Link=".\steam_api64.dll" />
   </ItemGroup>
 </Project>
