@@ -1,9 +1,9 @@
 ﻿using Cubicle.NET.Engine.Rendering;
 using Cubicle.NET.Util;
 using Silk.NET.Assimp;
-using Silk.NET.GLFW;
 using Silk.NET.Input;
 using Silk.NET.Maths;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Cubicle.NET.Engine
@@ -21,16 +21,21 @@ namespace Cubicle.NET.Engine
             {
                 this.inputContext.Mice[i].Cursor.CursorMode = CursorMode.Raw;
                 this.inputContext.Mice[i].MouseMove += OnMouseMove;
+                this.inputContext.Mice[i].Click += OnMouseClick;
             }
+        }
+
+        private void OnMouseClick(IMouse mouse, MouseButton button, Vector2 arg3)
+        {
+            if (Cubicle.Player.Target == null)
+                return;
+
+            if (button == MouseButton.Left)
+                Renderer.chunk.RemoveBlock((Vector3)Cubicle.Player.Target);
         }
 
         private void KeyDown(IKeyboard keyboard, Key key, int arg3)
         {
-            if (key == Key.Q)
-            {
-                Cubicle.Renderer.ToggleWireframe();
-            }
-
             if (key == Key.Escape)
             {
                 Cubicle.Quit();
@@ -44,51 +49,63 @@ namespace Cubicle.NET.Engine
                     this.inputContext.Mice[0].Cursor.CursorMode = CursorMode.Raw;
             }
 
+            if (Cubicle.Player == null || Cubicle.Renderer == null)
+                return;
+
+            if (key == Key.Q)
+            {
+                Cubicle.Renderer.ToggleWireframe();
+            }
+
             if (key == Key.Up)
             {
-                Renderer.Camera.Speed += 2.5f;
+                Cubicle.Player.Speed += 2.5f;
             }
             if (key == Key.Down)
             {
-                Renderer.Camera.Speed -= 2.5f;
+                Cubicle.Player.Speed -= 2.5f;
             }
         }
 
         public override void Update(double delta)
         {
-            var moveSpeed = Renderer.Camera.Speed * (float)delta;
+            if (Cubicle.Player == null || Cubicle.Renderer == null)
+                return;
+
+            var moveSpeed = Cubicle.Player.Speed * (float)delta;
 
             var primaryKeyboard = inputContext.Keyboards.FirstOrDefault();
+            if (primaryKeyboard == null)
+                return;
+
             if (primaryKeyboard.IsKeyPressed(Key.W))
             {
                 //Move forwards
-                Renderer.Camera.Position += moveSpeed * Renderer.Camera.Front;
+                Cubicle.Player.Position += moveSpeed * Cubicle.Player.Front;
             }
             if (primaryKeyboard.IsKeyPressed(Key.S))
             {
                 //Move backwards
-                Renderer.Camera.Position -= moveSpeed * Renderer.Camera.Front;
+                Cubicle.Player.Position -= moveSpeed * Cubicle.Player.Front;
             }
             if (primaryKeyboard.IsKeyPressed(Key.A))
             {
                 //Move left
-                Renderer.Camera.Position -= Vector3.Normalize(Vector3.Cross(Renderer.Camera.Front, Renderer.Camera.Up)) * moveSpeed;
+                Cubicle.Player.Position -= Vector3.Normalize(Vector3.Cross(Cubicle.Player.Front, Cubicle.Player.Up)) * moveSpeed;
             }
             if (primaryKeyboard.IsKeyPressed(Key.D))
             {
                 //Move right
-                Renderer.Camera.Position += Vector3.Normalize(Vector3.Cross(Renderer.Camera.Front, Renderer.Camera.Up)) * moveSpeed;
+                Cubicle.Player.Position += Vector3.Normalize(Vector3.Cross(Cubicle.Player.Front, Cubicle.Player.Up)) * moveSpeed;
             }
 
             if (primaryKeyboard.IsKeyPressed(Key.Space))
             {
-                //Move right
-                Renderer.Camera.Position.Y +=  moveSpeed;
+                Cubicle.Player.Position.Y +=  moveSpeed;
             }
             if (primaryKeyboard.IsKeyPressed(Key.ShiftLeft))
             {
-                //Move right
-                Renderer.Camera.Position.Y -= moveSpeed;
+                Cubicle.Player.Position.Y -= moveSpeed;
             }
         }
 
@@ -96,7 +113,7 @@ namespace Cubicle.NET.Engine
         private static unsafe void OnMouseMove(IMouse mouse, Vector2 position)
         {
             // We should be able to look around when we aren't caputring the cursor
-            if (mouse.Cursor.CursorMode != CursorMode.Raw)
+            if (mouse.Cursor.CursorMode != CursorMode.Raw || Cubicle.Player == null)
                 return;
 
             var lookSensitivity = 0.1f;
@@ -110,16 +127,16 @@ namespace Cubicle.NET.Engine
                 var yOffset = (position.Y - LastMousePosition.Y) * lookSensitivity;
                 LastMousePosition = position;
 
-                Renderer.Camera.Yaw += xOffset;
-                Renderer.Camera.Pitch -= yOffset;
+                Cubicle.Player.Yaw += xOffset;
+                Cubicle.Player.Pitch -= yOffset;
 
                 //We don't want to be able to look behind us by going over our head or under our feet so make sure it stays within these bounds
-                Renderer.Camera.Pitch = Math.Clamp(Renderer.Camera.Pitch, -89.0f, 89.0f);
+                Cubicle.Player.Pitch = Math.Clamp(Cubicle.Player.Pitch, -89.0f, 89.0f);
 
-                Renderer.Camera.Direction.X = MathF.Cos(MathHelper.DegreesToRadians(Renderer.Camera.Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Renderer.Camera.Pitch));
-                Renderer.Camera.Direction.Y = MathF.Sin(MathHelper.DegreesToRadians(Renderer.Camera.Pitch));
-                Renderer.Camera.Direction.Z = MathF.Sin(MathHelper.DegreesToRadians(Renderer.Camera.Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Renderer.Camera.Pitch));
-                Renderer.Camera.Front = Vector3.Normalize(Renderer.Camera.Direction);
+                Cubicle.Player.Direction.X = MathF.Cos(MathHelper.DegreesToRadians(Cubicle.Player.Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Cubicle.Player.Pitch));
+                Cubicle.Player.Direction.Y = MathF.Sin(MathHelper.DegreesToRadians(Cubicle.Player.Pitch));
+                Cubicle.Player.Direction.Z = MathF.Sin(MathHelper.DegreesToRadians(Cubicle.Player.Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Cubicle.Player.Pitch));
+                Cubicle.Player.Front = Vector3.Normalize(Cubicle.Player.Direction);
             }
         }
     }

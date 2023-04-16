@@ -16,12 +16,14 @@ namespace Cubicle.NET
 {
     public class Cubicle
     {
-        private Input input;
         public static Engine.Rendering.Renderer? Renderer;
+        public static Player? Player;
+
+        private Input input;
         private Steam steam;
         private DebugScreen? debug;
 
-        public static IWindow Window;
+        public static IWindow? Window;
         private IInputContext input_context;
         private GL? gl;
 
@@ -37,6 +39,7 @@ namespace Cubicle.NET
             Window.Load += OnLoad;
             Window.Update += OnUpdate;
             Window.Render += OnRender;
+            Window.FocusChanged += OnFocusChanged;
 
             Window.Initialize();
 
@@ -45,15 +48,19 @@ namespace Cubicle.NET
             steam = new Steam();
         }
 
+        private void OnFocusChanged(bool focus)
+        {
+        }
+
         public void Run()
         {
-            Window.Run();
-            Window.Dispose();
+            Window!.Run();
+            Window!.Dispose();
         }
 
         public static void Quit()
         {
-            Window.Close();
+            Window!.Close();
         }
 
         private void OnLoad()
@@ -64,19 +71,21 @@ namespace Cubicle.NET
             var PixelData = MemoryMarshal.AsBytes(_MemoryGroup.Span).ToArray();
 
             var icon = new RawImage(64, 64, new Memory<byte>(PixelData));
-            Window.SetWindowIcon(ref icon);
+            Window!.SetWindowIcon(ref icon);
 
             gl = GL.GetApi(Window);
+            Player = new Player(gl);
             Renderer = new Renderer(gl);
         }
 
         private void OnUpdate(double delta)
         {
-            if (debug == null) {
-                debug = new DebugScreen(gl, Window, input_context);
+            if (debug == null && gl != null) {
+                debug = new DebugScreen(gl, Window!, input_context);
             }
 
             input.Update(delta);
+            Player?.Update(delta);
             Renderer?.Update(delta);
             debug?.Update(delta);
         }

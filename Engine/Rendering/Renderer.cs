@@ -8,9 +8,8 @@ namespace Cubicle.NET.Engine.Rendering
     {
         private GL gl;
 
-        private Chunk chunk;
+        public static Chunk chunk;
 
-        public static Camera Camera;
         public static Shader BlockShader;
 
         public static Dictionary<String, Texture> Textures = new Dictionary<String, Texture>();
@@ -21,7 +20,6 @@ namespace Cubicle.NET.Engine.Rendering
             this.gl = gl;
             BlockShader = new Rendering.Shader(gl, "Res/Shaders/block.vert", "Res/Shaders/block.frag");
 
-            Camera = new Camera(gl);
             chunk = new Chunk(gl, new Vector3(0, 0, 0));
             
         }
@@ -39,7 +37,6 @@ namespace Cubicle.NET.Engine.Rendering
 
         public override void Update(double delta)
         {
-            //player.Update(delta);
         }
 
         public unsafe void Render(double delta)
@@ -48,7 +45,7 @@ namespace Cubicle.NET.Engine.Rendering
             gl.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            chunk.Draw(delta, Camera);
+            chunk.Draw(delta, Cubicle.Player!);
         }
     }
 }

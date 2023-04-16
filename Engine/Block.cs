@@ -1,6 +1,8 @@
 ﻿using Cubicle.NET.Engine.Rendering;
 using Cubicle.NET.Util;
 using Silk.NET.Assimp;
+using Silk.NET.Input;
+using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.SDL;
 using System.Numerics;
@@ -44,6 +46,13 @@ namespace Cubicle.NET.Engine
 
         public override void Draw(double delta, Rendering.Camera camera)
         {
+            float? rayBlockDistance = Cubicle.Player.Ray.Intersects(Position, Position + new Vector3(1f, 1f, 1f));
+            if (rayBlockDistance != null && rayBlockDistance < Cubicle.Player.MinDistanceToTarget)
+            {
+                Cubicle.Player.MinDistanceToTarget = (float)rayBlockDistance;
+                Cubicle.Player.Target = Position;
+            }
+
             // Don't draw encased blocks
             if (Encased)
                 return;
@@ -53,7 +62,7 @@ namespace Cubicle.NET.Engine
             Rendering.Renderer.BlockShader.SetUniform("uTexture0", 0);
 
             var model = LocalToWorld();
-            var view = Matrix4x4.CreateLookAt(camera.Position, camera.Position + camera.Front, camera.Up);
+            var view = Matrix4x4.CreateLookAt(camera.PerspectivePosition(), camera.PerspectivePosition() + camera.Front, camera.Up);
             //It's super important for the width / height calculation to regard each value as a float, otherwise
             //it creates rounding errors that result in viewport distortion
             var near = 0.1f;
@@ -106,7 +115,7 @@ namespace Cubicle.NET.Engine
         public override Matrix4x4 LocalToWorld()
         {
             return
-                Matrix4x4.CreateTranslation((Chunk.Position + Position) * 0.5f + new Vector3(0.25f, 0, 0.25f)) *
+                Matrix4x4.CreateTranslation((Chunk.Position + Position) * 0.5f + new Vector3(0.25f, 0.25f, 0.25f)) *
                 Matrix4x4.CreateRotationY(Euler.Y) *
                 Matrix4x4.CreateRotationX(Euler.X) *
                 Matrix4x4.CreateRotationZ(Euler.Z) *

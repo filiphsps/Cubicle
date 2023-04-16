@@ -33,7 +33,11 @@ namespace Cubicle.NET.Debug
             ImGui.SetWindowSize(new Vector2(800, 600));
             ImGui.SetWindowPos(new Vector2(0, 0));
 
-            var pos = Renderer.Camera.Position;
+            ImGui.GetWindowDrawList().AddRectFilled(new Vector2(398, 298),
+                new Vector2(402, 302),
+                ImGui.GetColorU32(new Vector4(0.15f, 0.25f, 0.15f, 0.75f)));
+
+            var pos = Cubicle.Player.Position;
             ImGui.GetWindowDrawList().AddText(new Vector2(5, 5),
                 0xFFffFFff,
                 $"{(1 / delta).ToString("000.00")} FPS");
@@ -44,8 +48,11 @@ namespace Cubicle.NET.Debug
 
             ImGui.GetWindowDrawList().AddText(new Vector2(5, 55),
                 0xFFffFFff,
-                $"Yaw: {Renderer.Camera.Yaw.ToString("0.00")}, Pitch: {Renderer.Camera.Pitch.ToString("0.00")}, Zoom: {Renderer.Camera.Zoom.ToString("0.00")}, Speed: {Renderer.Camera.Speed.ToString("0.00")}");
+                $"Yaw: {Cubicle.Player.Yaw.ToString("0.00")}, Pitch: {Cubicle.Player.Pitch.ToString("0.00")}, Zoom: {Cubicle.Player.Zoom.ToString("0.00")}, Speed: {Cubicle.Player.Speed.ToString("0.00")}");
 
+            ImGui.GetWindowDrawList().AddText(new Vector2(5, 80),
+                0xFFffFFff,
+                $"Looking at \"{(Cubicle.Player.Target == null ? "NONE" : Cubicle.Player.Target.ToString())}\"");
 
             ImGui.GetWindowDrawList().AddText(new Vector2(5, 535),
                 0xFFffFFff,

@@ -18,13 +18,13 @@ namespace Cubicle.NET.Engine
 
             for (var x = 0; x < 16; x++)
             {
-                for (var y = 0; y < 16; y++)
+                for (var y = 0; y < 4; y++)
                 {
                     for (var z = 0; z < 16; z++)
                     {
                         var id = "Grass";
 
-                        if (y < 15)
+                        if (y < 3)
                             id = "Dirt";
 
                         var block = new Block(gl, id);
@@ -35,10 +35,14 @@ namespace Cubicle.NET.Engine
                 }
             }
 
+            Calculate();
+        }
+
+        private void Calculate()
+        {
             foreach (var block in blocks.Values)
             {
-                // TODO: Do this on block change
-                // TODO: Check other chunks
+                // TODO: Do this properly.
                 block.CheckEncased();
             }
         }
@@ -54,6 +58,12 @@ namespace Cubicle.NET.Engine
             {
                 block.Draw(delta, camera);
             }
+        }
+
+        public void RemoveBlock(Vector3 pos)
+        {
+            blocks.Remove(pos);
+            Calculate();
         }
 
         public Block? GetBlock(float x, float y, float z)
