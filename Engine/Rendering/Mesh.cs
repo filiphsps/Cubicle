@@ -1,51 +1,47 @@
-﻿using Silk.NET.OpenGL;
+﻿using Cubicle.NET.Util;
+using Silk.NET.OpenGL;
 
 namespace Cubicle.NET.Engine.Rendering
 {
-    public class Mesh
+    public class Mesh : IDisposable
     {
-        private GL gl;
-
-        public uint VAO { get; set; }
-        public uint VBO { get; set; }
-        public List<float>? Verticies { get; set; }
-
-        public Mesh(GL gl)
+        public Mesh(GL gl, float[] vertices, uint[] indices, List<Texture> textures)
         {
-            this.gl = gl;
-        }
-        public Mesh(GL gl, float[] vertices)
-        {
-            this.gl = gl;
-            LoadVertices(vertices);
+            GL = gl;
+            Vertices = vertices;
+            Indices = indices;
+            Textures = textures;
+            SetupMesh();
         }
 
-        public unsafe void LoadVertices(float[] vertices)
+        public float[] Vertices { get; private set; }
+        public uint[] Indices { get; private set; }
+        public IReadOnlyList<Texture> Textures { get; private set; }
+        public VertexArrayObject<float, uint> VAO { get; set; }
+        public BufferObject<float> VBO { get; set; }
+        public BufferObject<uint> EBO { get; set; }
+        public GL GL { get; }
+
+        public unsafe void SetupMesh()
         {
-            Verticies = new List<float>(vertices);
-
-            VAO = gl.GenVertexArray();
-            gl.BindVertexArray(VAO);
-
-            VBO = gl.GenBuffer();
-
-            fixed (float* buf = Verticies.ToArray())
-            {
-                gl.BindBuffer(BufferTargetARB.ArrayBuffer, VBO);
-                gl.BufferData(
-                    BufferTargetARB.ArrayBuffer,
-                    (nuint)(Verticies.Count * sizeof(float)),
-                    buf,
-                    BufferUsageARB.StaticDraw);
-                gl.EnableVertexAttribArray(0);
-                gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, true, 0, (void*)0);
-            }
+            EBO = new BufferObject<uint>(GL, Indices, BufferTargetARB.ElementArrayBuffer);
+            VBO = new BufferObject<float>(GL, Vertices, BufferTargetARB.ArrayBuffer);
+            VAO = new VertexArrayObject<float, uint>(GL, VBO, EBO);
+            VAO.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
+            VAO.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
         }
 
-        public void Draw()
+        public void Bind()
         {
-            gl.BindVertexArray(VAO);
-            gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)Verticies!.Count);
+            VAO.Bind();
+        }
+
+        public void Dispose()
+        {
+            Textures = null;
+            VAO.Dispose();
+            VBO.Dispose();
+            EBO.Dispose();
         }
     }
 }

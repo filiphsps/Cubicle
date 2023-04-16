@@ -1,6 +1,8 @@
 ﻿using Cubicle.NET.Engine.Rendering;
+using Microsoft.VisualBasic;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
+using System.Numerics;
 
 namespace Cubicle.NET.Engine
 {
@@ -8,18 +10,20 @@ namespace Cubicle.NET.Engine
     {
         // FIXME: Migrate to actual block-class so we can combine meshes
         private List<Block> blocks = new List<Block>();
+        public Vector3D<int> Position;
 
-        public Chunk(GL gl)
+        public Chunk(GL gl, Vector3D<int> position)
         {
+            Position = position;
 
-            for (float x = 0; x < 16; x++)
+            for (var x = 0; x < 4; x++)
             {
-                for (float y = 0; y < 2; y++)
+                for (var y = 0; y < 1; y++)
                 {
-                    for (float z = 0; z < 16; z++)
+                    for (var z = 0; z < 4; z++)
                     {
                         var block = new Block(gl);
-                        block.Position = new Vector3D<float>(x, y, z);
+                        block.Position = new Vector3(x, y, z);
                         blocks.Add(block);
                     }
                 }
@@ -28,10 +32,6 @@ namespace Cubicle.NET.Engine
 
         public void Update(double delta)
         {
-            foreach (var block in blocks)
-            {
-                block.Update(delta);
-            }
         }
 
 
@@ -39,8 +39,13 @@ namespace Cubicle.NET.Engine
         {
             foreach (var block in blocks)
             {
-                block.Draw(camera);
+                block.Draw(delta, camera);
             }
+        }
+
+        private void GenerateMesh()
+        {
+            
         }
     }
 }

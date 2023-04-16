@@ -2,6 +2,7 @@
 using Cubicle.NET.Util;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
+using System.Numerics;
 using Shader = Cubicle.NET.Engine.Rendering.Shader;
 
 namespace Cubicle.NET.Engine
@@ -9,66 +10,41 @@ namespace Cubicle.NET.Engine
     
     public class Entity
     {
-        public Mesh Mesh;
+        public Model Model;
+        public Rendering.Texture Texture;
         public Shader Shader;
 
-        public Vector3D<float> Position;
-        public Vector3D<float> Velocity;
+        public Vector3 Position;
+        public Vector3 Velocity;
 
-        public Vector3D<float> Euler;
-        public Vector3D<float> Scale;
+        public Vector3 Euler;
+        public Vector3 Scale;
 
         public Entity()
         {
-            Position = Vector3D<float>.Zero;
-            Velocity = Vector3D<float>.Zero;
-            Euler = Vector3D<float>.Zero;
-            Scale = Vector3D<float>.One;
+            Position = Vector3.Zero;
+            Velocity = Vector3.Zero;
+            Euler = Vector3.Zero;
+            Scale = Vector3.One;
         }
 
-        public Entity(GL gl, string vertex, string fragment, float[] meshVertices)
+        public Entity(GL gl, string vertex, string fragment, float[] meshVertices, uint[] indices)
         {
-            Mesh = new Mesh(gl, meshVertices);
+            //Mesh = new Mesh(gl, meshVertices, indices);
             Shader = new Shader(gl, vertex, fragment);
 
-            Position = Vector3D<float>.Zero;
-            Velocity = Vector3D<float>.Zero;
-            Euler = Vector3D<float>.Zero;
-            Scale = Vector3D<float>.One;
+            Position = Vector3.Zero;
+            Velocity = Vector3.Zero;
+            Euler = Vector3.Zero;
+            Scale = Vector3.One;
         }
 
         public virtual void Update(double delta)
         {
         }
 
-        public virtual void Draw(Camera camera)
+        public virtual void Draw(double delta, Camera camera)
         {
-            Matrix4 mat = camera.Matrix() * LocalToWorld();
-
-            Shader.Use();
-            Shader.SetMatrix(mat);
-
-            Mesh.Draw();
-        }
-
-        public Matrix4 LocalToWorld()
-        {
-            return
-                Matrix4.Translate(Position) *
-                Matrix4.RotateY(Euler.Y) *
-                Matrix4.RotateX(Euler.X) *
-                Matrix4.RotateZ(Euler.Z) *
-                Matrix4.Scale(Scale);
-        }
-
-        public Matrix4 WorldToLocal()
-        {
-            return
-                Matrix4.Scale(Scale / 1.0f) *
-                Matrix4.RotateZ(-Euler.Z) *
-                Matrix4.RotateX(-Euler.X) *
-                Matrix4.RotateY(-Euler.Y) *
-                Matrix4.Translate(-Position);
         }
     }
 }

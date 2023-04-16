@@ -33,14 +33,14 @@ namespace Cubicle.NET.Debug
             ImGui.SetWindowSize(new Vector2(800, 600));
             ImGui.SetWindowPos(new Vector2(0, 0));
 
-            var pos = Renderer.player.Position;
+            /*var pos = Renderer.player.Position;
             var vel = Renderer.player.Velocity;
             ImGui.GetWindowDrawList().AddText(new Vector2(5, 5),
                 0xFFffFFff,
                 $"Position - X: {pos.X.ToString("0.00")}, Y: {pos.Y.ToString("0.00")}, Z: {pos.Z.ToString("0.00")}");
             ImGui.GetWindowDrawList().AddText(new Vector2(5, 25),
                 0xFFffFFff,
-                $"Velocity - X: {vel.X.ToString("0.00")}, Y: {vel.Y.ToString("0.00")}, Z: {vel.Z.ToString("0.00")}");
+                $"Velocity - X: {vel.X.ToString("0.00")}, Y: {vel.Y.ToString("0.00")}, Z: {vel.Z.ToString("0.00")}");*/
         }
 
         public void Render(double delta)

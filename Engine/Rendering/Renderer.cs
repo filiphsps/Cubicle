@@ -10,7 +10,7 @@ namespace Cubicle.NET.Engine.Rendering
 
         public static Player player;
         private Chunk chunk;
-        private Camera camera;
+        public static Camera camera;
 
         public unsafe Renderer(GL gl)
         {
@@ -20,27 +20,25 @@ namespace Cubicle.NET.Engine.Rendering
             camera = new Camera(gl);
 
             float[] player_vertices = { };
+            uint[] player_indices = { };
 
-            player = new Player(gl, "scene.vert", "scene.frag", player_vertices);
-            chunk = new Chunk(gl);
+            //player = new Player(gl, "scene.vert", "scene.frag", player_vertices, player_indices);
+            chunk = new Chunk(gl, new Vector3D<int>(0, 0, 0 ));
             
         }
 
         public override void Update(double delta)
         {
-            player.Update(delta);
+            //player.Update(delta);
         }
 
         public unsafe void Render(double delta)
         {
+            gl.Enable(EnableCap.DepthTest);
             gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             gl.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-            camera.Worldview = player.WorldToCamera();
-            camera.SetSize(800, 600, 0.01f, 100.0f, 65.0f);
-            camera.UseViewport();
 
-            player.Draw(camera);
             chunk.Draw(delta, camera);
         }
     }

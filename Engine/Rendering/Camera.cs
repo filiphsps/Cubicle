@@ -2,6 +2,7 @@
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.Vulkan;
+using System.Numerics;
 
 namespace Cubicle.NET.Engine.Rendering
 {
@@ -9,62 +10,22 @@ namespace Cubicle.NET.Engine.Rendering
     {
         private GL gl;
 
-        public Vector2D<uint> Viewport { get; set; }
-        public float Near { get; set; }
-        public float Far { get; set; }
-        public float FOV { get; set; }
-        public Matrix4 Projection { get; private set; }
-        public Matrix4 Worldview;
+        public Vector3 Position = new Vector3(0.0f, 0.0f, 3.0f);
+        public Vector3 Front = new Vector3(0.0f, 0.0f, -1.0f);
+        public Vector3 Up = Vector3.UnitY;
+        public Vector3 Direction = Vector3.Zero;
+        public float Yaw = -90f;
+        public float Pitch = 0f;
+        public float Zoom = 45f;
 
         public Camera(GL gl)
         {
             this.gl = gl;
-
-            Viewport = new Vector2D<uint>(800, 600);
-            Projection = Matrix4.Identity();
-            Worldview = Matrix4.Identity();
-        }
-
-        public void SetSize(int w, int h, float n, float f, float fov)
-        {
-            Viewport = new Vector2D<uint>((uint)w, (uint)h);
-            Near = n;
-            Far = f;
-            FOV = fov;
-
-            float fovRads = 1.0f / MathF.Tan(fov * MathF.PI / 360.0f);
-            float aspect = ((float)h) / ((float)w);
-            float distance = n - f;
-
-            Projection.M[0] = fovRads * aspect;
-            Projection.M[1] = 0.0f;
-            Projection.M[2] = 0.0f;
-            Projection.M[3] = 0.0f;
-
-            Projection.M[4] = 0.0f;
-            Projection.M[5] = fovRads;
-            Projection.M[6] = 0.0f;
-            Projection.M[7] = 0.0f;
-
-            Projection.M[8] = 0.0f;
-            Projection.M[9] = 0.0f;
-            Projection.M[10] = (n + f) / distance;
-            Projection.M[11] = (2 * n * f) / distance;
-
-            Projection.M[12] = 0.0f;
-            Projection.M[13] = 0.0f;
-            Projection.M[14] = -1.0f;
-            Projection.M[15] = 0.0f;
         }
 
         public void UseViewport()
         {
-            gl.Viewport(0, 0, Viewport.X, Viewport.Y);
-        }
-
-        public Matrix4 Matrix()
-        {
-            return Projection * Worldview;
+            gl.Viewport(0, 0, 800, 600);
         }
     }
 }

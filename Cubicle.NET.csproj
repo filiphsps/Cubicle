@@ -14,6 +14,7 @@
   <ItemGroup>
     <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
     <PackageReference Include="Silk.NET" Version="2.17.1" />
+    <PackageReference Include="Silk.NET.Assimp" Version="2.17.1" />
     <PackageReference Include="Silk.NET.OpenGL.Extensions.ImGui" Version="2.17.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
   </ItemGroup>
@@ -23,6 +24,10 @@
 	  <Content Include="Res\Icon.ico" />
 	  <None Include="$(SolutionDir)steam_api.dll" CopyToOutputDirectory="PreserveNewest" Link=".\steam_api.dll" />
 	  <None Include="$(SolutionDir)steam_api64.dll" CopyToOutputDirectory="PreserveNewest" Link=".\steam_api64.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Res\Models\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties res_4blocks_4grass_4block_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

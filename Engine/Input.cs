@@ -1,8 +1,10 @@
 ﻿using Cubicle.NET.Engine.Rendering;
 using Cubicle.NET.Util;
+using Silk.NET.Assimp;
 using Silk.NET.GLFW;
 using Silk.NET.Input;
 using Silk.NET.Maths;
+using System.Numerics;
 
 namespace Cubicle.NET.Engine
 {
@@ -10,49 +12,68 @@ namespace Cubicle.NET.Engine
     {
         IInputContext inputContext;
 
-        private Vector2D<double> last_mouse;
-        private Vector2D<double> delta_mouse;
-        private Vector2D<double> normalized_delta_mouse;
-
         public Input(IInputContext inputContext)
         {
             this.inputContext = inputContext;
-            this.inputContext.Mice[0].Cursor.CursorMode = CursorMode.Raw;
+            for (int i = 0; i < this.inputContext.Mice.Count; i++)
+            {
+                this.inputContext.Mice[i].Cursor.CursorMode = CursorMode.Raw;
+                this.inputContext.Mice[i].MouseMove += OnMouseMove;
+            }
         }
 
         public override void Update(double delta)
         {
-            var pos = this.inputContext.Mice[0].Position;
+            var moveSpeed = 2.5f * (float)delta;
 
-            delta_mouse = new Vector2D<double>(pos.X, pos.Y) - last_mouse;
-            normalized_delta_mouse = delta_mouse / new Vector2D<double>(800, 600);
-            last_mouse = new Vector2D<double>(pos.X, pos.Y);
+            var primaryKeyboard = inputContext.Keyboards.FirstOrDefault();
+            if (primaryKeyboard.IsKeyPressed(Key.W))
+            {
+                //Move forwards
+                Renderer.camera.Position += moveSpeed * Renderer.camera.Front;
+            }
+            if (primaryKeyboard.IsKeyPressed(Key.S))
+            {
+                //Move backwards
+                Renderer.camera.Position -= moveSpeed * Renderer.camera.Front;
+            }
+            if (primaryKeyboard.IsKeyPressed(Key.A))
+            {
+                //Move left
+                Renderer.camera.Position -= Vector3.Normalize(Vector3.Cross(Renderer.camera.Front, Renderer.camera.Up)) * moveSpeed;
+            }
+            if (primaryKeyboard.IsKeyPressed(Key.D))
+            {
+                //Move right
+                Renderer.camera.Position += Vector3.Normalize(Vector3.Cross(Renderer.camera.Front, Renderer.camera.Up)) * moveSpeed;
+            }
+        }
 
-            Console.Clear();
-            Console.WriteLine("Pos       : " + Renderer.player.Position);
-            Console.WriteLine("Vel       : " + Renderer.player.Velocity);
-            Console.WriteLine("Delta     : " + delta_mouse);
-            Console.WriteLine("Norm Delta: " + normalized_delta_mouse);
+        private static Vector2 LastMousePosition;
+        private static unsafe void OnMouseMove(IMouse mouse, Vector2 position)
+        {
+            var lookSensitivity = 0.1f;
+            if (LastMousePosition == default)
+            {
+                LastMousePosition = position;
+            }
+            else
+            {
+                var xOffset = (position.X - LastMousePosition.X) * lookSensitivity;
+                var yOffset = (position.Y - LastMousePosition.Y) * lookSensitivity;
+                LastMousePosition = position;
 
-            Renderer.player.CameraRotationY -= (float)normalized_delta_mouse.X;
-            Renderer.player.CameraRotationX -= (float)normalized_delta_mouse.Y;
+                Renderer.camera.Yaw += xOffset;
+                Renderer.camera.Pitch -= yOffset;
 
-            float moveF = 0.0f, moveL = 0.0f;
-            if (this.inputContext.Keyboards[0].IsKeyPressed(Key.W))
-                moveF += 1.0f;
-            if (this.inputContext.Keyboards[0].IsKeyPressed(Key.S))
-                moveF -= 1.0f;
-            if (this.inputContext.Keyboards[0].IsKeyPressed(Key.A))
-                moveL += 1.0f;
-            if (this.inputContext.Keyboards[0].IsKeyPressed(Key.D))
-                moveL -= 1.0f;
+                //We don't want to be able to look behind us by going over our head or under our feet so make sure it stays within these bounds
+                Renderer.camera.Pitch = Math.Clamp(Renderer.camera.Pitch, -89.0f, 89.0f);
 
-            if (this.inputContext.Keyboards[0].IsKeyPressed(Key.Space))
-                Renderer.player.Velocity.Y += 0.05f;
-            if (this.inputContext.Keyboards[0].IsKeyPressed(Key.ControlLeft))
-                Renderer.player.Velocity.Y -= 0.05f;
-
-            Renderer.player.Move(moveF, moveL, delta);
+                Renderer.camera.Direction.X = MathF.Cos(MathHelper.DegreesToRadians(Renderer.camera.Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Renderer.camera.Pitch));
+                Renderer.camera.Direction.Y = MathF.Sin(MathHelper.DegreesToRadians(Renderer.camera.Pitch));
+                Renderer.camera.Direction.Z = MathF.Sin(MathHelper.DegreesToRadians(Renderer.camera.Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Renderer.camera.Pitch));
+                Renderer.camera.Front = Vector3.Normalize(Renderer.camera.Direction);
+            }
         }
     }
 }
