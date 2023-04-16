@@ -16,11 +16,11 @@ namespace Cubicle.NET.Engine
         {
             Position = position;
 
-            for (var x = 0; x < 4; x++)
+            for (var x = 0; x < 16; x++)
             {
-                for (var y = 0; y < 1; y++)
+                for (var y = 0; y < 4; y++)
                 {
-                    for (var z = 0; z < 4; z++)
+                    for (var z = 0; z < 16; z++)
                     {
                         var block = new Block(gl);
                         block.Position = new Vector3(x, y, z);

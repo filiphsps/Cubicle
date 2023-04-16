@@ -14,7 +14,7 @@ namespace Cubicle.NET.Debug
         private ImGuiController controller;
         public DebugScreen(GL gl, IWindow window, IInputContext input)
         {
-            var font = new ImGuiFontConfig("res/test.ttf", 20);
+            var font = new ImGuiFontConfig("Res/font.ttf", 20);
             controller = new ImGuiController(gl, window, input, font);
         }
 
@@ -33,14 +33,18 @@ namespace Cubicle.NET.Debug
             ImGui.SetWindowSize(new Vector2(800, 600));
             ImGui.SetWindowPos(new Vector2(0, 0));
 
-            /*var pos = Renderer.player.Position;
-            var vel = Renderer.player.Velocity;
+            var pos = Renderer.Camera.Position;
             ImGui.GetWindowDrawList().AddText(new Vector2(5, 5),
                 0xFFffFFff,
-                $"Position - X: {pos.X.ToString("0.00")}, Y: {pos.Y.ToString("0.00")}, Z: {pos.Z.ToString("0.00")}");
-            ImGui.GetWindowDrawList().AddText(new Vector2(5, 25),
+                $"{(1 / delta).ToString("0.00")} FPS");
+
+            ImGui.GetWindowDrawList().AddText(new Vector2(5, 30),
                 0xFFffFFff,
-                $"Velocity - X: {vel.X.ToString("0.00")}, Y: {vel.Y.ToString("0.00")}, Z: {vel.Z.ToString("0.00")}");*/
+                $"X: {pos.X.ToString("0.00")}, Y: {pos.Y.ToString("0.00")}, Z: {pos.Z.ToString("0.00")}");
+
+            ImGui.GetWindowDrawList().AddText(new Vector2(5, 55),
+                0xFFffFFff,
+                $"Yaw: {Renderer.Camera.Yaw.ToString("0.00")}, Pitch: {Renderer.Camera.Pitch.ToString("0.00")}, Zoom: {Renderer.Camera.Zoom.ToString("0.00")}");
         }
 
         public void Render(double delta)

@@ -30,22 +30,28 @@ namespace Cubicle.NET.Engine
             if (primaryKeyboard.IsKeyPressed(Key.W))
             {
                 //Move forwards
-                Renderer.camera.Position += moveSpeed * Renderer.camera.Front;
+                Renderer.Camera.Position += moveSpeed * Renderer.Camera.Front;
             }
             if (primaryKeyboard.IsKeyPressed(Key.S))
             {
                 //Move backwards
-                Renderer.camera.Position -= moveSpeed * Renderer.camera.Front;
+                Renderer.Camera.Position -= moveSpeed * Renderer.Camera.Front;
             }
             if (primaryKeyboard.IsKeyPressed(Key.A))
             {
                 //Move left
-                Renderer.camera.Position -= Vector3.Normalize(Vector3.Cross(Renderer.camera.Front, Renderer.camera.Up)) * moveSpeed;
+                Renderer.Camera.Position -= Vector3.Normalize(Vector3.Cross(Renderer.Camera.Front, Renderer.Camera.Up)) * moveSpeed;
             }
             if (primaryKeyboard.IsKeyPressed(Key.D))
             {
                 //Move right
-                Renderer.camera.Position += Vector3.Normalize(Vector3.Cross(Renderer.camera.Front, Renderer.camera.Up)) * moveSpeed;
+                Renderer.Camera.Position += Vector3.Normalize(Vector3.Cross(Renderer.Camera.Front, Renderer.Camera.Up)) * moveSpeed;
+            }
+
+            if (primaryKeyboard.IsKeyPressed(Key.Space))
+            {
+                //Move right
+                Renderer.Camera.Position.Y +=  moveSpeed;
             }
         }
 
@@ -63,16 +69,16 @@ namespace Cubicle.NET.Engine
                 var yOffset = (position.Y - LastMousePosition.Y) * lookSensitivity;
                 LastMousePosition = position;
 
-                Renderer.camera.Yaw += xOffset;
-                Renderer.camera.Pitch -= yOffset;
+                Renderer.Camera.Yaw += xOffset;
+                Renderer.Camera.Pitch -= yOffset;
 
                 //We don't want to be able to look behind us by going over our head or under our feet so make sure it stays within these bounds
-                Renderer.camera.Pitch = Math.Clamp(Renderer.camera.Pitch, -89.0f, 89.0f);
+                Renderer.Camera.Pitch = Math.Clamp(Renderer.Camera.Pitch, -89.0f, 89.0f);
 
-                Renderer.camera.Direction.X = MathF.Cos(MathHelper.DegreesToRadians(Renderer.camera.Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Renderer.camera.Pitch));
-                Renderer.camera.Direction.Y = MathF.Sin(MathHelper.DegreesToRadians(Renderer.camera.Pitch));
-                Renderer.camera.Direction.Z = MathF.Sin(MathHelper.DegreesToRadians(Renderer.camera.Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Renderer.camera.Pitch));
-                Renderer.camera.Front = Vector3.Normalize(Renderer.camera.Direction);
+                Renderer.Camera.Direction.X = MathF.Cos(MathHelper.DegreesToRadians(Renderer.Camera.Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Renderer.Camera.Pitch));
+                Renderer.Camera.Direction.Y = MathF.Sin(MathHelper.DegreesToRadians(Renderer.Camera.Pitch));
+                Renderer.Camera.Direction.Z = MathF.Sin(MathHelper.DegreesToRadians(Renderer.Camera.Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Renderer.Camera.Pitch));
+                Renderer.Camera.Front = Vector3.Normalize(Renderer.Camera.Direction);
             }
         }
     }

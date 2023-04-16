@@ -8,16 +8,19 @@ namespace Cubicle.NET.Engine.Rendering
     {
         private GL gl;
 
-        public static Player player;
         private Chunk chunk;
-        public static Camera camera;
+
+        public static Player player;
+        public static Camera Camera;
+        public static Shader BlockShader;
 
         public unsafe Renderer(GL gl)
         {
             this.gl = gl;
+            BlockShader = new Rendering.Shader(gl, "Res/Shaders/block.vert", "Res/Shaders/block.frag");
 
 
-            camera = new Camera(gl);
+            Camera = new Camera(gl);
 
             float[] player_vertices = { };
             uint[] player_indices = { };
@@ -39,7 +42,7 @@ namespace Cubicle.NET.Engine.Rendering
             gl.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 
-            chunk.Draw(delta, camera);
+            chunk.Draw(delta, Camera);
         }
     }
 }

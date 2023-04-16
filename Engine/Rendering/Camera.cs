@@ -10,13 +10,13 @@ namespace Cubicle.NET.Engine.Rendering
     {
         private GL gl;
 
-        public Vector3 Position = new Vector3(0.0f, 0.0f, 3.0f);
+        public Vector3 Position = new Vector3(-2.5f, 2.0f, 0.85f);
         public Vector3 Front = new Vector3(0.0f, 0.0f, -1.0f);
         public Vector3 Up = Vector3.UnitY;
         public Vector3 Direction = Vector3.Zero;
-        public float Yaw = -90f;
-        public float Pitch = 0f;
-        public float Zoom = 45f;
+        public float Yaw = -2f;
+        public float Pitch = -25f;
+        public float Zoom = 75f;
 
         public Camera(GL gl)
         {

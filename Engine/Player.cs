@@ -12,10 +12,6 @@ namespace Cubicle.NET.Engine
         {
         }
 
-        public Player(GL gl, string vertex, string fragment, float[] meshVertices, uint[] indices) : base(gl, vertex, fragment, meshVertices, indices)
-        {
-        }
-
         public override void Update(double delta)
         {
         }

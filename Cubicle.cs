@@ -25,7 +25,8 @@ namespace Cubicle.NET
             window = Window.Create(WindowOptions.Default with {
                 Size = new Vector2D<int>(800, 600),
                 Title = "Cubicle",
-                WindowBorder = WindowBorder.Fixed
+                WindowBorder = WindowBorder.Fixed,
+                VSync = true
             });
 
             window.Load += OnLoad;
