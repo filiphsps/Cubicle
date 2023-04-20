@@ -14,9 +14,8 @@ namespace Cubicle {
             AllocConsole();
 #endif
 
-            using (Cubicle game = new Cubicle()) {
+            using (var game = new Cubicle())
                 game.Run();
-            }
         }
     }
 }

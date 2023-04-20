@@ -6,9 +6,9 @@
 
 ### Packages
 
--   [Arch](https://github.com/genaray/Arch)
 -   [Apos.Input](https://github.com/Apostolique/Apos.Input)
 -   [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended)
+-   [MonoGame.Extended.Entities](https://github.com/craftworkgames/MonoGame.Extended)
 -   [Facepunch.Steamworks](https://github.com/Facepunch/Facepunch.Steamworks)
 
 ### Fonts

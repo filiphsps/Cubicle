@@ -1,14 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Cubicle.Source.Systems;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Entities;
 using Steamworks;
 using System;
 using System.IO;
 
 namespace Cubicle {
     public class Cubicle : Game {
-        // TODO: Create proper steam class
-        public uint AppID;
+        public uint AppID = 1882990;
 
         GraphicsDeviceManager _graphics;
+        World _world;
 
         public Cubicle() {
             _graphics = new GraphicsDeviceManager(this) {
@@ -20,29 +23,34 @@ namespace Cubicle {
             IsFixedTimeStep = true;
             IsMouseVisible = true;
 
+            Window.AllowUserResizing = true;
+
             Content.RootDirectory = "Assets";
         }
 
         protected override void Initialize() {
-            AppID = Convert.ToUInt32(File.ReadAllText("steam_appid.txt").TrimEnd('\r', '\n'), 10);
-            SteamClient.Init(AppID);
-
             base.Initialize();
         }
 
         protected override void LoadContent() {
+            _world = new WorldBuilder()
+                .AddSystem(new InputSystem(this))
+                .AddSystem(new SteamSystem(AppID))
+                .AddSystem(new RenderSystem(GraphicsDevice))
+                .Build();
+
             base.LoadContent();
         }
 
-        protected override void UnloadContent() {
-            base.UnloadContent();
-        }
-
         protected override void Update(GameTime gameTime) {
+            _world.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime) {
+            GraphicsDevice.Clear(Color.Black);
+
+            _world.Draw(gameTime);
             base.Draw(gameTime);
         }
 
