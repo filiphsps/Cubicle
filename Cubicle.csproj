@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <RollForward>Major</RollForward>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <TieredCompilation>true</TieredCompilation>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Assets\Res\app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\Res\Icon@32x32.ico</ApplicationIcon>
+    <StartupObject>Cubicle.Program</StartupObject>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Arch" Version="1.2.4.2-beta" />
+    <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
+	  <PackageReference Include="MonoGame.Extended" Version="3.8.0">
+	    <ExcludeAssets>contentFiles</ExcludeAssets>
+	  </PackageReference>
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
+    <Message Text="Restoring dotnet tools" Importance="High" />
+    <Exec Command="dotnet tool restore" />
+  </Target>
+
+  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+    <DefineConstants>_WINDOWS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(SolutionDir)Assets\**" CopyToOutputDirectory="Always" LinkBase="Assets\" />
+    <None Include="$(SolutionDir)steam_appid.txt" CopyToOutputDirectory="Always" Link=".\steam_appid.txt" />
+    <None Include="$(SolutionDir)steam_api.dll" CopyToOutputDirectory="Always" Link=".\steam_api.dll" />
+    <None Include="$(SolutionDir)steam_api64.dll" CopyToOutputDirectory="Always" Link=".\steam_api64.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Icon.bmp">
+      <LogicalName>Icon.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icon.ico">
+      <LogicalName>Icon.ico</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

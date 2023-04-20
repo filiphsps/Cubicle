@@ -1,0 +1,52 @@
+name: Build and Publish
+
+on: [push]
+
+jobs:
+    build:
+        runs-on: windows-latest
+
+        steps:
+            - uses: actions/checkout@v3
+            - name: Setup .NET Core SDK 7.0.x
+              uses: actions/setup-dotnet@v3
+              with:
+                  dotnet-version: 7.0.x
+
+            - name: Install dependencies
+              run: dotnet restore
+
+            - name: Build
+              run: dotnet build --configuration Release --no-restore
+
+            - uses: actions/upload-artifact@v2
+              with:
+                  name: win64
+                  path: bin/Release/net7.0
+
+    deploy:
+        runs-on: ubuntu-latest
+        needs: [build]
+        if: github.ref == 'refs/heads/master'
+
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+            - name: Download win64 Artifact
+              uses: actions/download-artifact@v2
+              with:
+                  name: win64
+                  path: bin/Release/net7.0
+
+            - name: Publish
+              uses: filiphsps/steam-deploy@main
+              with:
+                  username: ${{ secrets.STEAM_USERNAME }}
+                  configVdf: ${{ secrets.STEAM_CONFIG_VDF}}
+                  appId: 1882990
+                  buildDescription: '[CI] ${{ github.event.head_commit.message }}'
+                  rootPath: bin
+                  depot2Path: Release/net7.0
+                  releaseBranch: prerelease
