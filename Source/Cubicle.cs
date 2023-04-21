@@ -1,16 +1,20 @@
-﻿using Cubicle.Source.Systems;
+﻿using Cubicle.Entities;
+using Cubicle.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Entities;
 using Steamworks;
 using System;
-using System.IO;
 
 namespace Cubicle {
     public class Cubicle : Game {
         public uint AppID = 1882990;
 
+        // TODO: ShaderManager
+        public static Effect Effect;
+
         GraphicsDeviceManager _graphics;
+        EntityFactory _entityFactory;
         World _world;
 
         public Cubicle() {
@@ -33,13 +37,20 @@ namespace Cubicle {
         }
 
         protected override void LoadContent() {
+            Effect = Content.Load<Effect>("Shaders/Basic");
+
             _world = new WorldBuilder()
                 .AddSystem(new InputSystem(this))
-                .AddSystem(new SteamSystem(AppID))
+                .AddSystem(new CameraSystem())
+                .AddSystem(new PrepareRenderSystem(GraphicsDevice))
                 .AddSystem(new RenderSystem(GraphicsDevice))
+                .AddSystem(new SteamSystem(AppID))
                 .Build();
 
-            base.LoadContent();
+            _entityFactory = new EntityFactory(_world);
+
+            _entityFactory.CreatePlayer();
+            _entityFactory.CreateCube();
         }
 
         protected override void Update(GameTime gameTime) {
@@ -48,8 +59,6 @@ namespace Cubicle {
         }
 
         protected override void Draw(GameTime gameTime) {
-            GraphicsDevice.Clear(Color.Black);
-
             _world.Draw(gameTime);
             base.Draw(gameTime);
         }

@@ -2,7 +2,7 @@
 using MonoGame.Extended.Entities.Systems;
 using Steamworks;
 
-namespace Cubicle.Source.Systems {
+namespace Cubicle.Systems {
     public class SteamSystem : UpdateSystem {
         public SteamSystem(uint appId) {
             SteamClient.Init(appId);
