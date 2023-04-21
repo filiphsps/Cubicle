@@ -1,7 +1,5 @@
 ﻿using Cubicle.Components;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using Vector3 = System.Numerics.Vector3;
 

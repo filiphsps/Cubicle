@@ -1,12 +1,8 @@
 ﻿using Cubicle.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
-using System.Numerics;
-using Quaternion = Microsoft.Xna.Framework.Quaternion;
-using Vector3 = System.Numerics.Vector3;
 
 namespace Cubicle.Systems {
     public class ModelRenderSystem : EntityDrawSystem {

@@ -2,12 +2,9 @@
 using Cubicle.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
-using System;
 using KeyState = Cubicle.Components.KeyState;
-using Vector3 = System.Numerics.Vector3;
 using Vector2 = System.Numerics.Vector2;
 
 namespace Cubicle.Systems {

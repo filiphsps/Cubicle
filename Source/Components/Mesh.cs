@@ -1,6 +1,5 @@
 ﻿using Cubicle.Rendering;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace Cubicle.Components {
     public class Mesh {
