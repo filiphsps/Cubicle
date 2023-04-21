@@ -54,4 +54,11 @@
       <LogicalName>Icon.ico</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\Models\" />
+    <Folder Include="Content\Models\" />
+    <Folder Include="Source\Level\Chunk\" />
+    <Folder Include="Source\Networking\" />
+  </ItemGroup>
 </Project>

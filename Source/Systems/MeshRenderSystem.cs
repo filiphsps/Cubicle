@@ -7,7 +7,7 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 
 namespace Cubicle.Systems {
-    public class RenderSystem : EntityDrawSystem {
+    public class MeshRenderSystem : EntityDrawSystem {
         GraphicsDevice _graphics;
         ComponentMapper<Renderable> _renderableMapper;
         ComponentMapper<Mesh> _meshMapper;
@@ -16,7 +16,7 @@ namespace Cubicle.Systems {
         // TODO: Make this dynamic
         DynamicVertexBuffer buffer;
 
-        public RenderSystem(GraphicsDevice graphics)
+        public MeshRenderSystem(GraphicsDevice graphics)
             : base(Aspect.All(typeof(Renderable), typeof(Mesh), typeof(Transform3))) {
             _graphics = graphics;
         }

@@ -12,6 +12,7 @@ namespace Cubicle {
 
         // TODO: ShaderManager
         public static Effect Effect;
+        public static Model Model;
 
         GraphicsDeviceManager _graphics;
         EntityFactory _entityFactory;
@@ -19,8 +20,8 @@ namespace Cubicle {
 
         public Cubicle() {
             _graphics = new GraphicsDeviceManager(this) {
-                PreferredBackBufferWidth = 854,
-                PreferredBackBufferHeight = 480,
+                PreferredBackBufferWidth = 800,
+                PreferredBackBufferHeight = 600,
                 IsFullScreen = false,
             };
 
@@ -38,12 +39,15 @@ namespace Cubicle {
 
         protected override void LoadContent() {
             Effect = Content.Load<Effect>("Shaders/Basic");
+            Model = Content.Load<Model>("Models/Test");
 
             _world = new WorldBuilder()
-                .AddSystem(new InputSystem(this))
-                .AddSystem(new CameraSystem())
                 .AddSystem(new PrepareRenderSystem(GraphicsDevice))
-                .AddSystem(new RenderSystem(GraphicsDevice))
+                .AddSystem(new InputSystem(this))
+                .AddSystem(new MovementSystem())
+                .AddSystem(new CameraSystem())
+                .AddSystem(new MeshRenderSystem(GraphicsDevice))
+                .AddSystem(new ModelRenderSystem(GraphicsDevice))
                 .AddSystem(new SteamSystem(AppID))
                 .Build();
 

@@ -1,5 +1,6 @@
 ﻿using Cubicle.Components;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using Vector3 = System.Numerics.Vector3;
@@ -7,18 +8,21 @@ using Vector3 = System.Numerics.Vector3;
 namespace Cubicle.Entities {
     public class EntityFactory {
         private readonly World _world;
+        Renderable _renderable;
 
         public EntityFactory(World world) {
             _world = world;
+
+            _renderable = new Renderable() { Effect = Cubicle.Effect };
         }
 
         public Entity CreatePlayer() {
             Entity entity = _world.CreateEntity();
-            entity.Attach(new Transform3(new Vector3(10, 0, 10)));
-            entity.Attach(new Renderable() { Effect = Cubicle.Effect });
+            entity.Attach(new Transform3(new Vector3(0, 0, 0)));
+            entity.Attach(_renderable);
             entity.Attach(new Camera() {
-                Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(70),
-                (float)800 / 600, 0.1f, 100f) // FIXME
+                Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(75),
+                (float)800 / 600, 0.1f, 1000f) // FIXME
             });
             entity.Attach(new Input());
             entity.Attach(new Player());
@@ -28,9 +32,9 @@ namespace Cubicle.Entities {
 
         public Entity CreateCube() {
             Entity entity = _world.CreateEntity();
-            entity.Attach(new Transform3(new Vector3(0, 0, 0)));
-            entity.Attach(new Renderable() { Effect = Cubicle.Effect });
-            entity.Attach(new Mesh());
+            entity.Attach(new Transform3(new Vector3(0, -5, -25)));
+            entity.Attach(_renderable);
+            entity.Attach(Cubicle.Model);
 
             return entity;
         }

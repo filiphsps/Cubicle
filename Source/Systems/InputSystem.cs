@@ -2,6 +2,7 @@
 using Cubicle.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using System;
@@ -42,12 +43,10 @@ namespace Cubicle.Systems {
                 // TODO: figre out if this is actually okay
                 var input = _inputMapper.Get(entityId);
 
-                input.Forward = _forward.Pressed() ? KeyState.Pressed : KeyState.Released;
-                input.Backward = _backward.Pressed() ? KeyState.Pressed : KeyState.Released;
-                input.Left = _left.Pressed() ? KeyState.Pressed : KeyState.Released;
-                input.Right = _right.Pressed() ? KeyState.Pressed : KeyState.Released;
-
-                _inputMapper.Put(entityId, input);
+                input.Forward = _forward.Held() ? KeyState.Pressed : KeyState.Released;
+                input.Backward = _backward.Held() ? KeyState.Pressed : KeyState.Released;
+                input.Left = _left.Held() ? KeyState.Pressed : KeyState.Released;
+                input.Right = _right.Held() ? KeyState.Pressed : KeyState.Released;
             }
 
             InputHelper.UpdateCleanup();
