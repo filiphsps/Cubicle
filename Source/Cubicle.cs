@@ -19,6 +19,9 @@ namespace Cubicle {
         EntityFactory _entityFactory;
         World _world;
 
+        RasterizerState _rasterizerFill;
+        RasterizerState _rasterizerWire;
+
         public Cubicle() {
             _graphics = new GraphicsDeviceManager(this) {
                 PreferredBackBufferWidth = 800,
@@ -62,14 +65,26 @@ namespace Cubicle {
             _entityFactory.CreateChunkHandler();
             _entityFactory.CreatePlayer();
             _entityFactory.CreateCube();
+
+            _rasterizerFill = GraphicsDevice.RasterizerState;
+            RasterizerState rasterizerState = new RasterizerState();
+            rasterizerState.FillMode = FillMode.WireFrame;
+            _rasterizerWire = rasterizerState;
         }
 
         protected override void Update(GameTime gameTime) {
             _world.Update(gameTime);
             base.Update(gameTime);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (Keyboard.GetState().IsKeyDown(Keys.R)) {
+                if (GraphicsDevice.RasterizerState.FillMode == FillMode.WireFrame)
+                    GraphicsDevice.RasterizerState = _rasterizerFill;
+                else
+                    GraphicsDevice.RasterizerState = _rasterizerWire;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape)) {
                 Exit();
+            }
         }
 
         protected override void Draw(GameTime gameTime) {

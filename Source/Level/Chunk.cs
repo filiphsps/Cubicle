@@ -6,10 +6,11 @@ using System.Numerics;
 namespace Cubicle.Level {
     public sealed partial class Chunk : IDisposable {
         public Vector3 Position;
-        public List<Block> Blocks = new List<Block>();
+        public Dictionary<Vector3, Block> Blocks = new Dictionary<Vector3, Block>();
 
         public static int SIZE = 16;
         public static int HEIGHT = 128;
+        public static int LAST = 15;
 
         public Chunk() {
             //Only about ~5% of all blocks are visible

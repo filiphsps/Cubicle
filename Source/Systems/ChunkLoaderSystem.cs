@@ -11,8 +11,6 @@ namespace Cubicle.Systems {
         ComponentMapper<Chunks> _chunksMapper;
         ComponentMapper<ChunkRequester> _requesterMapper;
 
-        List<Block> _blocks;
-
         public ChunkLoaderSystem()
             : base(Aspect.All(typeof(Chunks), typeof(ChunkRequester))) {
         }
@@ -20,15 +18,6 @@ namespace Cubicle.Systems {
         public override void Initialize(IComponentMapperService mapperService) {
             _chunksMapper = mapperService.GetMapper<Chunks>();
             _requesterMapper = mapperService.GetMapper<ChunkRequester>();
-
-            _blocks = new List<Block>();
-            for (var x = 0; x < 16; x++) {
-                for (var y = 0; y < 4; y++) {
-                    for (var z = 0; z < 16; z++) {
-                        _blocks.Add(new Block() { Position = new Vector3(x, y, z) });
-                    }
-                }
-            }
         }
 
         public override void Process(GameTime gameTime, int entityId) {
@@ -42,10 +31,9 @@ namespace Cubicle.Systems {
                     continue;
 
                 var chunk = new Chunk() {
-                    Position = position,
-                    Blocks = _blocks
+                    Position = position
                 };
-                chunk.CalculateMesh();
+                chunk.Generate();
 
                 chunks.LoadedChunks.Add(position, chunk);
             }

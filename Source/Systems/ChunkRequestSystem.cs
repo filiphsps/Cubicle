@@ -26,7 +26,7 @@ namespace Cubicle.Systems {
             if (requester.RequestedChunks.Count > 0)
                 return;
 
-            var distance = 2;
+            var distance = 6;
 
             var center_x = (int)transform.Position.X >> 4;
             var center_z = (int)transform.Position.Z >> 4;

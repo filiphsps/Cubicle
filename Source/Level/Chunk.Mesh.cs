@@ -11,15 +11,15 @@ namespace Cubicle.Level {
         public int VertexCount;
 
         public void CalculateMesh() {
-            //bool[] visibleFaces = new bool[6];
+            bool[] visibleFaces = new bool[6];
 
-            foreach (var block in Blocks) {
-                //visibleFaces = GetVisibleFaces(visibleFaces, block.Position);
+            foreach (var block in Blocks.Values) {
+                visibleFaces = GetVisibleFaces(visibleFaces, block);
 
                 for (int face = 0; face < 6; face++) {
-                    //if (visibleFaces[face]) {
+                    if (visibleFaces[face]) {
                         AddFaceMesh(block, face);
-                    //}
+                    }
                 }
             }
 

@@ -45,6 +45,7 @@ namespace Cubicle.Systems {
             foreach (var entityId in ActiveEntities) {
                 // TODO: figre out if this is actually okay
                 var input = _inputMapper.Get(entityId);
+                var currentMouseState = Mouse.GetState();
 
                 input.Forward = _forward.Held() ? KeyState.Pressed : KeyState.Released;
                 input.Backward = _backward.Held() ? KeyState.Pressed : KeyState.Released;
@@ -54,11 +55,14 @@ namespace Cubicle.Systems {
                 input.Up = _up.Held() ? KeyState.Pressed : KeyState.Released;
                 input.Down = _down.Held() ? KeyState.Pressed : KeyState.Released;
 
-                input.MouseDelta = new Vector2(Mouse.GetState().X, Mouse.GetState().Y) -
+                input.MouseDelta = new Vector2(currentMouseState.X, currentMouseState.Y) -
                     input.LastMousePointer;
 
-                Mouse.SetPosition(400, 300);
-                input.MousePointer = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+                if ((new Vector2(currentMouseState.X, currentMouseState.Y) - new Vector2(400, 300)).Length() > 200) {
+                    Mouse.SetPosition(400, 300);
+                    currentMouseState = Mouse.GetState();
+                }
+                input.MousePointer = new Vector2(currentMouseState.X, currentMouseState.Y);
                 input.LastMousePointer = input.MousePointer;
             }
 
