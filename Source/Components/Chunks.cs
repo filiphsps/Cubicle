@@ -9,6 +9,6 @@ using Cubicle.Level;
 
 namespace Cubicle.Components {
     public class Chunks {
-        public List<Chunk> LoadedChunks = new List<Chunk>();
+        public Dictionary<Vector3, Chunk> LoadedChunks = new Dictionary<Vector3, Chunk>();
     }
 }

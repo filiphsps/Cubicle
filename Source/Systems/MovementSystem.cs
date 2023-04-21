@@ -69,8 +69,6 @@ namespace Cubicle.Systems {
                 positionDelta += delta * velocity.Z * Vector3.Cross(Vector3.UnitY, hor);
 
                 transform.Position += positionDelta;
-
-                Console.WriteLine($"{transform.Position}\n{positionDelta}");
             }
         }
     }

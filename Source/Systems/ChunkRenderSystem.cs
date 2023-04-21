@@ -29,7 +29,7 @@ namespace Cubicle.Systems {
                 var chunks = _chunksMapper.Get(entityId);
                 var model = Cubicle.Model;
 
-                foreach (var chunk in chunks.LoadedChunks) {
+                foreach (var chunk in chunks.LoadedChunks.Values) {
                     var chunk_pos = chunk.Position;
                     var world_pos = new Vector3(chunk_pos.X * 16, chunk_pos.Y, chunk_pos.Z * 16);
 
