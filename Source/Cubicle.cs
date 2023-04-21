@@ -2,6 +2,7 @@
 using Cubicle.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Entities;
 using Steamworks;
 using System;
@@ -23,10 +24,11 @@ namespace Cubicle {
                 PreferredBackBufferWidth = 800,
                 PreferredBackBufferHeight = 600,
                 IsFullScreen = false,
+                SynchronizeWithVerticalRetrace = false
             };
 
-            IsFixedTimeStep = true;
-            IsMouseVisible = true;
+            IsFixedTimeStep = false;
+            IsMouseVisible = false;
 
             Window.AllowUserResizing = true;
 
@@ -42,17 +44,21 @@ namespace Cubicle {
             Model = Content.Load<Model>("Models/Test");
 
             _world = new WorldBuilder()
+                .AddSystem(new ChunkRequestSystem())
+                .AddSystem(new ChunkLoaderSystem())
                 .AddSystem(new PrepareRenderSystem(GraphicsDevice))
                 .AddSystem(new InputSystem(this))
                 .AddSystem(new MovementSystem())
                 .AddSystem(new CameraSystem())
                 .AddSystem(new MeshRenderSystem(GraphicsDevice))
                 .AddSystem(new ModelRenderSystem(GraphicsDevice))
+                .AddSystem(new ChunkRenderSystem(GraphicsDevice))
                 .AddSystem(new SteamSystem(AppID))
                 .Build();
 
             _entityFactory = new EntityFactory(_world);
 
+            _entityFactory.CreateChunkHandler();
             _entityFactory.CreatePlayer();
             _entityFactory.CreateCube();
         }
@@ -60,6 +66,9 @@ namespace Cubicle {
         protected override void Update(GameTime gameTime) {
             _world.Update(gameTime);
             base.Update(gameTime);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
         }
 
         protected override void Draw(GameTime gameTime) {

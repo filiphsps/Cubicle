@@ -8,6 +8,7 @@ namespace Cubicle.Systems {
             SteamClient.Init(appId);
         }
 
-        public override void Update(GameTime gameTime) { }
+        public override void Update(GameTime gameTime) {
+        }
     }
 }

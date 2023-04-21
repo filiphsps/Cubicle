@@ -7,7 +7,7 @@ using MonoGame.Extended.Entities.Systems;
 namespace Cubicle.Systems {
     public class CameraSystem : EntityProcessingSystem {
         ComponentMapper<Camera> _cameraMapper;
-        ComponentMapper<Transform3> _transformMapper;
+        ComponentMapper<Transform> _transformMapper;
 
         public CameraSystem()
             : base(Aspect.All(typeof(Camera))) {
@@ -15,7 +15,7 @@ namespace Cubicle.Systems {
 
         public override void Initialize(IComponentMapperService mapperService) {
             _cameraMapper = mapperService.GetMapper<Camera>();
-            _transformMapper = mapperService.GetMapper<Transform3>();
+            _transformMapper = mapperService.GetMapper<Transform>();
         }
 
         public override void Process(GameTime gameTime, int entityId) {
@@ -26,8 +26,10 @@ namespace Cubicle.Systems {
             //
             // TODO: Maybe just treat the camera position as an offset in
             // those cases?
-            if (transform != null)
+            if (transform != null) {
                 camera.Position = transform.Position;
+                camera.Forward = transform.Forward;
+            }
 
             camera.View = Matrix.CreateLookAt(camera.Position, camera.Position + camera.Forward, camera.Up);
         }

@@ -11,20 +11,20 @@ namespace Cubicle.Systems {
         GraphicsDevice _graphics;
         ComponentMapper<Renderable> _renderableMapper;
         ComponentMapper<Mesh> _meshMapper;
-        ComponentMapper<Transform3> _transformMapper;
+        ComponentMapper<Transform> _transformMapper;
 
         // TODO: Make this dynamic
         DynamicVertexBuffer buffer;
 
         public MeshRenderSystem(GraphicsDevice graphics)
-            : base(Aspect.All(typeof(Renderable), typeof(Mesh), typeof(Transform3))) {
+            : base(Aspect.All(typeof(Renderable), typeof(Mesh), typeof(Transform))) {
             _graphics = graphics;
         }
 
         public override void Initialize(IComponentMapperService mapperService) {
             _renderableMapper = mapperService.GetMapper<Renderable>();
             _meshMapper = mapperService.GetMapper<Mesh>();
-            _transformMapper = mapperService.GetMapper<Transform3>();
+            _transformMapper = mapperService.GetMapper<Transform>();
 
             buffer = new DynamicVertexBuffer(_graphics, typeof(VertexPositionTextureLight),
                         (int)2e4, BufferUsage.WriteOnly);
