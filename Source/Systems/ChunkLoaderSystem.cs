@@ -3,8 +3,6 @@ using Cubicle.Level;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
-using System.Collections.Generic;
-using Vector3 = System.Numerics.Vector3;
 
 namespace Cubicle.Systems {
     public class ChunkLoaderSystem : EntityProcessingSystem {

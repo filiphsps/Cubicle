@@ -34,17 +34,33 @@ namespace Cubicle.Level {
 
         static void AddData(List<VertexPositionTextureLight> vertices, int face, Block block, Vector3 chunkPosition) {
             var position = block.Position;
+            var world_pos = new Vector3(chunkPosition.X * 16, chunkPosition.Y, chunkPosition.Z * 16) + position;
 
             for (int i = 0; i < 6; i++) {
                 VertexPositionTextureLight vertex = Cube.Faces[face][i];
                 vertex.Position += position;
-                vertex.Color = Color.Green;
-                vertex.Color.B -= (byte)((position.X + position.Z) * 8);
-                vertex.Color.R -= (byte)((chunkPosition.X + chunkPosition.Z) * 32);
+                vertex.Normal = world_pos;
+
+                var x = chunkPosition.X;
+                if (x < 0)
+                    x *= -1;
+                var z = chunkPosition.Z;
+                if (z < 0)
+                    z *= -1;
+
+                var r = 25 + (int)((255 - 25) * (x + z) / 8);
+                var g = 25 + (int)((100 - 25) * (x + z) / 8);
+                var b = 25 + (int)((255 - 25) * (x + z) / 8);
+
+                g += 25 + (int)((155 - 25) * (position.X + position.Z) / 32);
+                b += 25 + (int)((155 - 25) * (position.Y) / 16);
+
+                vertex.Color = new Color(r, g, b, 1);
+
 
                 if (position.X == 15 && position.Z == 15)
                     vertex.Color = Color.Blue;
-                else if(position.X == 15 && position.Z == 0)
+                else if (position.X == 15 && position.Z == 0)
                     vertex.Color = Color.Red;
                 else if (position.X == 0 && position.Z == 15)
                     vertex.Color = Color.Yellow;

@@ -70,6 +70,24 @@ namespace Cubicle {
             RasterizerState rasterizerState = new RasterizerState();
             rasterizerState.FillMode = FillMode.WireFrame;
             _rasterizerWire = rasterizerState;
+
+            // Effect
+            Cubicle.Effect.Alpha = 1f;
+            Cubicle.Effect.VertexColorEnabled = true;
+
+            Cubicle.Effect.EnableDefaultLighting();
+            Cubicle.Effect.PreferPerPixelLighting = true;
+            Cubicle.Effect.EmissiveColor = new Vector3(0.75f, 0.75f, 0.75f);
+            Cubicle.Effect.AmbientLightColor = new Vector3(0.25f, 0.25f, 0.25f);
+            Cubicle.Effect.DirectionalLight0.Enabled = false;
+            Cubicle.Effect.DirectionalLight1.Enabled = false;
+            Cubicle.Effect.DirectionalLight2.Enabled = false;
+            Cubicle.Effect.LightingEnabled = true;
+
+            /*Cubicle.Effect.FogEnabled = true;
+            Cubicle.Effect.FogColor = Color.White.ToVector3();
+            Cubicle.Effect.FogEnd = 50f;
+            Cubicle.Effect.FogStart = 30f;*/
         }
 
         protected override void Update(GameTime gameTime) {
