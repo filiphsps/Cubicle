@@ -12,7 +12,7 @@ namespace Cubicle {
         public uint AppID = 1882990;
 
         // TODO: ShaderManager
-        public static Effect Effect;
+        public static BasicEffect Effect;
         public static Model Model;
 
         GraphicsDeviceManager _graphics;
@@ -40,7 +40,8 @@ namespace Cubicle {
         }
 
         protected override void LoadContent() {
-            Effect = Content.Load<Effect>("Shaders/Basic");
+            Effect = new BasicEffect(GraphicsDevice);
+            //Effect = Content.Load<Effect>("Shaders/Basic");
             Model = Content.Load<Model>("Models/Test");
 
             _world = new WorldBuilder()

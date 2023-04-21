@@ -1,9 +1,23 @@
+using Cubicle.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
 namespace Cubicle.Level {
-    public class Chunk {
+    public sealed partial class Chunk : IDisposable {
         public Vector3 Position;
         public List<Block> Blocks = new List<Block>();
+
+        public static int SIZE = 16;
+        public static int HEIGHT = 128;
+
+        public Chunk() {
+            //Only about ~5% of all blocks are visible
+            int total = (int)(0.05 * SIZE * SIZE * HEIGHT);
+
+            VertexList = new List<VertexPositionTextureLight>(6 * total);
+        }
+
+        public void Dispose() { }
     }
 }

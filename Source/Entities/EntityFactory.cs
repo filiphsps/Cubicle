@@ -18,7 +18,7 @@ namespace Cubicle.Entities {
 
         public Entity CreatePlayer() {
             Entity entity = _world.CreateEntity();
-            entity.Attach(new Transform() { Position = new Vector3(0, 0, 0) });
+            entity.Attach(new Transform() { Position = new Vector3(0, 10, 0) });
             entity.Attach(_renderable);
             entity.Attach(new Camera() {
                 Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(75),
@@ -42,7 +42,7 @@ namespace Cubicle.Entities {
 
         public Entity CreateCube() {
             Entity entity = _world.CreateEntity();
-            entity.Attach(new Transform() { Position = new Vector3(0, -5, -25) });
+            entity.Attach(new Transform() { Position = new Vector3(0, 5, 0) });
             entity.Attach(_renderable);
             entity.Attach(Cubicle.Model);
 

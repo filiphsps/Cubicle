@@ -7,29 +7,26 @@ using Vector3 = System.Numerics.Vector3;
 namespace Cubicle.Systems {
     public class ChunkRequestSystem : EntityProcessingSystem {
         ComponentMapper<ChunkRequester> _requesterMapper;
-        ComponentMapper<Player> _playerMapper;
         ComponentMapper<Transform> _transformMapper;
 
         public ChunkRequestSystem()
-            : base(Aspect.All(typeof(ChunkRequester), typeof(Player), typeof(Transform))) {
+            : base(Aspect.All(typeof(ChunkRequester), typeof(Transform))) {
         }
 
         public override void Initialize(IComponentMapperService mapperService) {
             _requesterMapper = mapperService.GetMapper<ChunkRequester>();
-            _playerMapper = mapperService.GetMapper<Player>();
             _transformMapper = mapperService.GetMapper<Transform>();
         }
 
         public override void Process(GameTime gameTime, int entityId) {
             var requester = _requesterMapper.Get(entityId);
-            var player = _playerMapper.Get(entityId);
             var transform = _transformMapper.Get(entityId);
 
             // TODO: do this properly
             if (requester.RequestedChunks.Count > 0)
                 return;
 
-            var distance = 4;
+            var distance = 2;
 
             var center_x = (int)transform.Position.X >> 4;
             var center_z = (int)transform.Position.Z >> 4;

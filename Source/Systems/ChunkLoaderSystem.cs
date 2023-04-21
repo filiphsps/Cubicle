@@ -23,7 +23,7 @@ namespace Cubicle.Systems {
 
             _blocks = new List<Block>();
             for (var x = 0; x < 16; x++) {
-                for (var y = 0; y < 1; y++) {
+                for (var y = 0; y < 4; y++) {
                     for (var z = 0; z < 16; z++) {
                         _blocks.Add(new Block() { Position = new Vector3(x, y, z) });
                     }
@@ -41,10 +41,13 @@ namespace Cubicle.Systems {
                 if (chunks.LoadedChunks.ContainsKey(position))
                     continue;
 
-                chunks.LoadedChunks.Add(position, new Chunk() {
+                var chunk = new Chunk() {
                     Position = position,
                     Blocks = _blocks
-                });
+                };
+                chunk.CalculateMesh();
+
+                chunks.LoadedChunks.Add(position, chunk);
             }
 
             requester.RequestedChunks.Clear();

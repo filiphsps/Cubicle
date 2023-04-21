@@ -21,7 +21,7 @@ namespace Cubicle.Systems {
         }
 
         public override void Update(GameTime gameTime) {
-            _graphics.Clear(Color.Black);
+            _graphics.Clear(Color.Aqua);
 
             foreach (var entityId in ActiveEntities) {
                 var camera = _cameraMapper.Get(entityId);
