@@ -1,12 +1,13 @@
 using Cubicle.Rendering;
-using System;
+using Cubicle.Singletons;
+using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Numerics;
 
 namespace Cubicle.Level {
-    public sealed partial class Chunk : IDisposable {
+    public sealed partial class Chunk {
         public Vector3 Position;
-        public Dictionary<Vector3, Block> Blocks = new Dictionary<Vector3, Block>();
+        public Dictionary<Vector3, BlockReference> Blocks = new Dictionary<Vector3, BlockReference>();
 
         public static int SIZE = 16;
         public static int LAST = 15;
@@ -18,6 +19,12 @@ namespace Cubicle.Level {
             VertexList = new List<VertexPositionTextureLight>(6 * total);
         }
 
-        public void Dispose() { }
+        // TODO: Update this on modifications
+        public Atlas Atlas;
+        public Texture2D Texture {
+            get {
+                return Atlas.Texture;
+            }
+        }
     }
 }

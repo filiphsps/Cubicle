@@ -59,14 +59,14 @@ namespace Cubicle.Models {
 
             Faces = new VertexPositionTextureLight[][] { front, back, top, bottom, right, left };
 
-            /*for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < 6; i++) {
                 Faces[i][0].TextureCoordinate = new Vector2(1, 1);
                 Faces[i][1].TextureCoordinate = new Vector2(1, 0);
                 Faces[i][2].TextureCoordinate = new Vector2(0, 1);
                 Faces[i][3].TextureCoordinate = Faces[i][1].TextureCoordinate;
                 Faces[i][4].TextureCoordinate = new Vector2(0, 0);
                 Faces[i][5].TextureCoordinate = Faces[i][2].TextureCoordinate;
-            }*/
+            }
         }
 
         static Vector3 FaceNormal(VertexPositionNormalTexture[] vertices) {

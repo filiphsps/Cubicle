@@ -1,7 +1,10 @@
-﻿using System.Numerics;
+﻿using System;
 
 namespace Cubicle.Level {
     public class Block {
-        public Vector3 Position;
+        public String Name;
+
+        // TODO: Multiface
+        public String TextureName;
     }
 }

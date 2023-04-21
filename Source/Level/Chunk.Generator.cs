@@ -1,42 +1,50 @@
-﻿using System;
+﻿using Cubicle.Singletons;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vector3 = System.Numerics.Vector3;
 
 namespace Cubicle.Level {
     public sealed partial class Chunk {
         public void Generate() {
-            var size = Position.Y == 0 ? 16 : 1;
-            for (var x = 0; x < size; x++) {
-                for (var y = 0; y < 1; y++) {
-                    for (var z = 0; z < size; z++) {
-                        Blocks.Add(new Vector3(x, y, z), new Block() { Position = new Vector3(x, y, z) });
+            if (Position.Y != 0)
+                return;
+
+            for (var x = 0; x < 16; x++) {
+                for (var y = 0; y < 2; y++) {
+                    for (var z = 0; z < 16; z++) {
+                        if (y == 1)
+                            Blocks.Add(new Vector3(x, y, z), new BlockReference("grass") { Position = new Vector3(x, y, z) });
+                        else
+                            Blocks.Add(new Vector3(x, y, z), new BlockReference("dirt") { Position = new Vector3(x, y, z) });
                     }
                 }
             }
 
+            Atlas = TexturesManager.GetAtlas(Blocks.Values.Select(x => x.Id).Distinct().ToList());
             this.CalculateMesh();
         }
 
-        public bool[] GetVisibleFaces(bool[] visibleFaces, Block block) {
+        public bool[] GetVisibleFaces(bool[] visibleFaces, BlockReference block) {
             Array.Clear(visibleFaces, 0, 6);
 
             var x = block.Position.X;
             var y = block.Position.Y;
             var z = block.Position.Z;
 
-            Block? adjacentBlock = null;
+            BlockReference? adjacent = null;
 
             if (z != LAST) {
-                adjacentBlock = Blocks.GetValueOrDefault(new Vector3(x, y, z + 1));
-                visibleFaces[0] = adjacentBlock is null;
+                adjacent = Blocks.GetValueOrDefault(new Vector3(x, y, z + 1));
+                visibleFaces[0] = adjacent is null;
             }
             else {
                 visibleFaces[0] = true;
             }
 
             if (z != 0) {
-                adjacentBlock = Blocks.GetValueOrDefault(new Vector3(x, y, z - 1));
-                visibleFaces[1] = adjacentBlock is null;
+                adjacent = Blocks.GetValueOrDefault(new Vector3(x, y, z - 1));
+                visibleFaces[1] = adjacent is null;
             }
             else {
                 visibleFaces[1] = true;
@@ -44,16 +52,16 @@ namespace Cubicle.Level {
 
 
             if (y != LAST) {
-                adjacentBlock = Blocks.GetValueOrDefault(new Vector3(x, y + 1, z));
-                visibleFaces[2] = adjacentBlock is null;
+                adjacent = Blocks.GetValueOrDefault(new Vector3(x, y + 1, z));
+                visibleFaces[2] = adjacent is null;
             }
             else {
                 visibleFaces[2] = true;
             };
 
             if (x != 0) {
-                adjacentBlock = Blocks.GetValueOrDefault(new Vector3(x, y - 1, z));
-                visibleFaces[3] = adjacentBlock is null;
+                adjacent = Blocks.GetValueOrDefault(new Vector3(x, y - 1, z));
+                visibleFaces[3] = adjacent is null;
             }
             else {
                 visibleFaces[3] = true;
@@ -61,16 +69,16 @@ namespace Cubicle.Level {
 
 
             if (x != LAST) {
-                adjacentBlock = Blocks.GetValueOrDefault(new Vector3(x + 1, y, z));
-                visibleFaces[4] = adjacentBlock is null;
+                adjacent = Blocks.GetValueOrDefault(new Vector3(x + 1, y, z));
+                visibleFaces[4] = adjacent is null;
             }
             else {
                 visibleFaces[4] = true;
             };
 
             if (x != 0) {
-                adjacentBlock = Blocks.GetValueOrDefault(new Vector3(x - 1, y, z));
-                visibleFaces[5] = adjacentBlock is null;
+                adjacent = Blocks.GetValueOrDefault(new Vector3(x - 1, y, z));
+                visibleFaces[5] = adjacent is null;
             }
             else {
                 visibleFaces[5] = true;

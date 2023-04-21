@@ -1,4 +1,5 @@
 ﻿using Cubicle.Entities;
+using Cubicle.Singletons;
 using Cubicle.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,7 +14,6 @@ namespace Cubicle {
 
         // TODO: ShaderManager
         public static BasicEffect Effect;
-        public static Model Model;
 
         GraphicsDeviceManager _graphics;
         EntityFactory _entityFactory;
@@ -43,9 +43,12 @@ namespace Cubicle {
         }
 
         protected override void LoadContent() {
+            GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+
             Effect = new BasicEffect(GraphicsDevice);
-            //Effect = Content.Load<Effect>("Shaders/Basic");
-            Model = Content.Load<Model>("Models/Test");
+
+            TexturesManager.LoadContent(GraphicsDevice);
+            BlocksManager.LoadContent();
 
             _world = new WorldBuilder()
                 .AddSystem(new ChunkRequestSystem())
@@ -62,9 +65,10 @@ namespace Cubicle {
 
             _entityFactory = new EntityFactory(_world);
 
+            _entityFactory.CreateSettingsHandler();
+            _entityFactory.CreateBlockHandler();
             _entityFactory.CreateChunkHandler();
             _entityFactory.CreatePlayer();
-            _entityFactory.CreateCube();
 
             _rasterizerFill = GraphicsDevice.RasterizerState;
             RasterizerState rasterizerState = new RasterizerState();
@@ -84,10 +88,7 @@ namespace Cubicle {
             Cubicle.Effect.DirectionalLight2.Enabled = false;
             Cubicle.Effect.LightingEnabled = true;
 
-            /*Cubicle.Effect.FogEnabled = true;
-            Cubicle.Effect.FogColor = Color.White.ToVector3();
-            Cubicle.Effect.FogEnd = 50f;
-            Cubicle.Effect.FogStart = 30f;*/
+            Cubicle.Effect.TextureEnabled = true;
         }
 
         protected override void Update(GameTime gameTime) {

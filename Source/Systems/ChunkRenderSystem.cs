@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
+using System.Linq;
 
 namespace Cubicle.Systems {
     public class ChunkRenderSystem : EntityDrawSystem {
@@ -32,6 +33,9 @@ namespace Cubicle.Systems {
                 var chunks = _chunksMapper.Get(entityId);
 
                 foreach (var chunk in chunks.LoadedChunks.Values) {
+                    if (!chunk.Blocks.Any())
+                        continue;
+
                     var chunk_pos = chunk.Position;
                     var world_pos = new Vector3(chunk_pos.X * 16, chunk_pos.Y * 16, chunk_pos.Z * 16);
                     var model_matrix = Matrix.CreateScale(1f)
@@ -43,6 +47,7 @@ namespace Cubicle.Systems {
                     Cubicle.Effect.World = renderable.World * model_matrix;
                     Cubicle.Effect.View = renderable.View;
                     Cubicle.Effect.Projection = renderable.Projection;
+                    Cubicle.Effect.Texture = chunk.Texture;
 
                     _buffer.SetData(chunk.Vertices);
                     _graphics.SetVertexBuffer(_buffer);
