@@ -30,6 +30,9 @@ namespace Cubicle.Level {
         }
 
         public bool[] GetVisibleFaces(bool[] visibleFaces, BlockReference block) {
+            // TODO: Cleanup
+            // FIXME: Handle edges & top/bottom
+
             Array.Clear(visibleFaces, 0, 6);
 
             var x = block.Position.X;
