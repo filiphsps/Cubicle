@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -35,7 +36,7 @@ namespace Cubicle.Singletons {
     public struct Atlas {
         public Texture2D Texture;
         public int TexturesCount;
-        public Dictionary<int, ushort> BlockIndices;
+        public Dictionary<int, ushort[]> BlockIndices;
     }
 
     public static class TexturesManager {
@@ -56,9 +57,9 @@ namespace Cubicle.Singletons {
             foreach (var texture in textures) {
                 var key = texture.Split('\\')[1].Split('.')[0];
 
-                FileStream fileStream = new FileStream(texture, FileMode.Open);
-                _blockTextures.Add(key, Texture2D.FromStream(_graphics, fileStream));
-                fileStream.Dispose();
+                FileStream stream = new FileStream(texture, FileMode.Open);
+                _blockTextures.Add(key, Texture2D.FromStream(_graphics, stream));
+                stream.Dispose();
             }
         }
 
@@ -69,34 +70,66 @@ namespace Cubicle.Singletons {
             if (_chunkAtlas.ContainsKey(ids))
                 return _chunkAtlas[ids];
 
-            Console.WriteLine($"TextureAtlas(${_chunkAtlas.Count}): MISS - [{String.Join(";", ids)}]");
+            Console.WriteLine("GetAtlas: MISS - [{0}]", String.Join(";", ids));
 
-            // TODO: Dynamic size
-            var texture = new Texture2D(_graphics, 8, ids.Length * 8);
+            // Figure out which textures to add to the atlas
+            // Some blocks may have more than one texture (multiface)
+            var textures_to_add = new List<String>();
+            for (ushort i = 0; i < ids.Length; i++) {
+                var names = BlocksManager.GetTextureNames(ids[i]);
+                foreach (var name in names) {
+                    if (textures_to_add.Contains(name))
+                        continue;
+
+                    textures_to_add.Add(name);
+                }
+            }
+
+            // TODO: Dynamic width & height
+            var texture = new Texture2D(_graphics, 8, textures_to_add.Count * 8);
             Color[] texture_data = new Color[texture.Width * texture.Height];
 
-            var block_indices = new Dictionary<int, ushort>();
+            // Draw texture atlas
+            var texture_indices = new Dictionary<String, ushort>();
+            for (ushort i = 0; i < textures_to_add.Count; i++) {
+                var name = textures_to_add[i];
+                var block_texture = _blockTextures[name];
 
-            // TODO: handle duplicate textures
-            for (ushort i = 0; i < ids.Length; i++) {
-                var id = ids[i];
-                var name = BlocksManager.GetTextureName(id);
-
-                var block_text = _blockTextures[name];
-                Color[] color = new Color[block_text.Width * block_text.Height];
-                block_text.GetData(color);
-
+                Color[] color = new Color[block_texture.Width * block_texture.Height];
+                block_texture.GetData(color);
                 for (int j = 0; j < color.Length; j++) {
                     texture_data[(i * color.Length) + j] = color[j];
                 }
 
-                block_indices.Add(id, i);
+                texture_indices.Add(name, i);
             }
             texture.SetData(texture_data);
 
+            // Create the final array
+            var block_indices = new Dictionary<int, ushort[]>();
+            for (ushort i = 0; i < ids.Length; i++) {
+                var id = ids[i];
+                var names = BlocksManager.GetTextureNames(id);
+
+                var f = names.Select(x => texture_indices[x]).ToList();
+                switch (f.Count) {
+                    case 6:
+                        block_indices.Add(id, new ushort[6] { f[0], f[1], f[2], f[3], f[4], f[5] });
+                        break;
+                    case 3:
+                        block_indices.Add(id, new ushort[6] { f[0], f[0], f[1], f[2], f[0], f[0] });
+                        break;
+                    case 1:
+                        block_indices.Add(id, new ushort[6] { f[0], f[0], f[0], f[0], f[0], f[0] });
+                        break;
+                    default:
+                        throw new Exception("");
+                }
+            }
+
             _chunkAtlas.Add(ids, new Atlas() with {
                 Texture = texture,
-                TexturesCount = ids.Length,
+                TexturesCount = texture_indices.Count,
                 BlockIndices = block_indices
             });
             return _chunkAtlas[ids];

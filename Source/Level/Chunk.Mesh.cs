@@ -15,11 +15,12 @@ namespace Cubicle.Level {
             bool[] visibleFaces = new bool[6];
 
             foreach (var block in Blocks.Values) {
+                var textures = Atlas.BlockIndices[block.Id];
                 visibleFaces = GetVisibleFaces(visibleFaces, block);
 
                 for (int face = 0; face < 6; face++) {
                     if (visibleFaces[face]) {
-                        AddFaceMesh(block, face);
+                        AddFaceMesh(block, face, textures[face]);
                     }
                 }
             }
@@ -27,13 +28,14 @@ namespace Cubicle.Level {
             Vertices = VertexList.ToArray();
             VertexCount = VertexList.Count;
             VertexList.Clear();
+
+            _buffer.SetData(Vertices);
         }
-        void AddFaceMesh(BlockReference block, int face) {
-            // TODO: multiface
-            AddData(VertexList, face, block);
+        void AddFaceMesh(BlockReference block, int face, ushort? texture) {
+            AddData(VertexList, face, block, texture);
         }
 
-        void AddData(List<VertexPositionTextureLight> vertices, int face, BlockReference block) {
+        void AddData(List<VertexPositionTextureLight> vertices, int face, BlockReference block, ushort? texture) {
             var position = block.Position;
             var world_pos = new Vector3(Position.X * 16, Position.Y, Position.Z * 16) + position;
 
@@ -52,7 +54,6 @@ namespace Cubicle.Level {
                 else if (position.X == 0 && position.Z == 0)
                     vertex.Color = Color.Purple;
 
-                var texture = Atlas.BlockIndices[block.Id];
                 var textureCount = Atlas.TexturesCount;
                 if (vertex.TextureCoordinate.Y == 0) {
                     vertex.TextureCoordinate.Y = (float)texture / textureCount;

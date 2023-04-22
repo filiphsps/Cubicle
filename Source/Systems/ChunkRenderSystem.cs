@@ -12,8 +12,6 @@ namespace Cubicle.Systems {
         ComponentMapper<Renderable> _renderableMapper;
         ComponentMapper<Chunks> _chunksMapper;
 
-        DynamicVertexBuffer _buffer;
-
         public ChunkRenderSystem(GraphicsDevice graphics)
             : base(Aspect.All(typeof(Renderable), typeof(Chunks))) {
             _graphics = graphics;
@@ -22,9 +20,6 @@ namespace Cubicle.Systems {
         public override void Initialize(IComponentMapperService mapperService) {
             _renderableMapper = mapperService.GetMapper<Renderable>();
             _chunksMapper = mapperService.GetMapper<Chunks>();
-
-            _buffer = new DynamicVertexBuffer(_graphics, typeof(VertexPositionTextureLight),
-                        (int)2e5, BufferUsage.WriteOnly);
         }
 
         public override void Draw(GameTime gameTime) {
@@ -49,8 +44,7 @@ namespace Cubicle.Systems {
                     Cubicle.Effect.Projection = renderable.Projection;
                     Cubicle.Effect.Texture = chunk.Texture;
 
-                    _buffer.SetData(chunk.Vertices);
-                    _graphics.SetVertexBuffer(_buffer);
+                    chunk.Apply(_graphics);
 
                     foreach (EffectPass pass in Cubicle.Effect.CurrentTechnique.Passes) {
                         pass.Apply();

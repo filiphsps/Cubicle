@@ -1,6 +1,7 @@
 using Cubicle.Components;
 using Cubicle.Level;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 
@@ -8,9 +9,11 @@ namespace Cubicle.Systems {
     public class ChunkLoaderSystem : EntityProcessingSystem {
         ComponentMapper<Chunks> _chunksMapper;
         ComponentMapper<ChunkRequester> _requesterMapper;
+        private GraphicsDevice _graphics;
 
-        public ChunkLoaderSystem()
+        public ChunkLoaderSystem(GraphicsDevice graphics)
             : base(Aspect.All(typeof(Chunks), typeof(ChunkRequester))) {
+            _graphics = graphics;
         }
 
         public override void Initialize(IComponentMapperService mapperService) {
@@ -23,12 +26,11 @@ namespace Cubicle.Systems {
             var requester = _requesterMapper.Get(entityId);
 
             // TODO: Unloading
-
             foreach (var position in requester.RequestedChunks) {
                 if (chunks.LoadedChunks.ContainsKey(position))
                     continue;
 
-                var chunk = new Chunk() {
+                var chunk = new Chunk(_graphics) {
                     Position = position
                 };
                 chunk.Generate();

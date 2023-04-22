@@ -11,12 +11,16 @@ namespace Cubicle.Level {
                 return;
 
             for (var x = 0; x < 16; x++) {
-                for (var y = 0; y < 2; y++) {
+                for (var y = 0; y < 6; y++) {
                     for (var z = 0; z < 16; z++) {
-                        if (y == 1)
-                            Blocks.Add(new Vector3(x, y, z), new BlockReference("grass") { Position = new Vector3(x, y, z) });
+                        var pos = new Vector3(x, y, z);
+
+                        if (y == 5)
+                            Blocks.Add(pos, new BlockReference("grass") { Position = pos });
+                        else if (y == 0)
+                            Blocks.Add(pos, new BlockReference("border") { Position = pos });
                         else
-                            Blocks.Add(new Vector3(x, y, z), new BlockReference("dirt") { Position = new Vector3(x, y, z) });
+                            Blocks.Add(pos, new BlockReference("dirt") { Position = pos });
                     }
                 }
             }

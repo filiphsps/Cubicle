@@ -4,7 +4,7 @@ namespace Cubicle.Level {
     public class Block {
         public String Name;
 
-        // TODO: Multiface
-        public String TextureName;
+        // "front", "back", "top", "bottom", "right", "left"
+        public String[] TextureNames;
     }
 }

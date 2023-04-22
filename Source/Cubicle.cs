@@ -52,7 +52,7 @@ namespace Cubicle {
 
             _world = new WorldBuilder()
                 .AddSystem(new ChunkRequestSystem())
-                .AddSystem(new ChunkLoaderSystem())
+                .AddSystem(new ChunkLoaderSystem(GraphicsDevice))
                 .AddSystem(new PrepareRenderSystem(GraphicsDevice))
                 .AddSystem(new InputSystem(this))
                 .AddSystem(new MovementSystem())
