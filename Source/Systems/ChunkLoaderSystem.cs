@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
+using System;
+using System.Linq;
 
 namespace Cubicle.Systems {
     public class ChunkLoaderSystem : EntityProcessingSystem {
@@ -25,7 +27,6 @@ namespace Cubicle.Systems {
             var chunks = _chunksMapper.Get(entityId);
             var requester = _requesterMapper.Get(entityId);
 
-            // TODO: Unloading
             foreach (var position in requester.RequestedChunks) {
                 if (chunks.LoadedChunks.ContainsKey(position))
                     continue;
@@ -36,6 +37,13 @@ namespace Cubicle.Systems {
                 chunk.Generate();
 
                 chunks.LoadedChunks.Add(position, chunk);
+            }
+
+            var correct = chunks.LoadedChunks
+                .Where(x => !requester.RequestedChunks.Any(y => y == x.Key)).ToList();
+
+            foreach (var chunk in correct) {
+                chunks.LoadedChunks.Remove(chunk.Key);
             }
 
             requester.RequestedChunks.Clear();

@@ -13,15 +13,3 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Shaders/Basic.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Shaders/Basic.fx
-
-#begin Shaders/Blocks/Solid.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Shaders/Blocks/Solid.fx
-

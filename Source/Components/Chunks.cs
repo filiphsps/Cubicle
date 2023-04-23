@@ -1,6 +1,6 @@
 ﻿using Cubicle.Level;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace Cubicle.Components {
     public class Chunks {

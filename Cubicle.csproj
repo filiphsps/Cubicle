@@ -39,10 +39,13 @@
   <ItemGroup>
     <None Include="$(SolutionDir)Assets\**" CopyToOutputDirectory="Always" LinkBase="Assets\" />
     <Compile Remove="Source\Level\Chunk\**" />
+    <Compile Remove="Source\Networking\**" />
     <Compile Remove="Source\Singleton\**" />
     <EmbeddedResource Remove="Source\Level\Chunk\**" />
+    <EmbeddedResource Remove="Source\Networking\**" />
     <EmbeddedResource Remove="Source\Singleton\**" />
     <None Remove="Source\Level\Chunk\**" />
+    <None Remove="Source\Networking\**" />
     <None Remove="Source\Singleton\**" />
     <None Include="$(SolutionDir)steam_appid.txt" CopyToOutputDirectory="Always" Link=".\steam_appid.txt" />
     <None Include="$(SolutionDir)steam_api.dll" CopyToOutputDirectory="Always" Link=".\steam_api.dll" />
@@ -61,6 +64,5 @@
   <ItemGroup>
     <Folder Include="Assets\Models\" />
     <Folder Include="Content\Models\" />
-    <Folder Include="Source\Networking\" />
   </ItemGroup>
 </Project>
