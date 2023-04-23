@@ -1,4 +1,5 @@
-﻿using Cubicle.Entities;
+﻿using Cubicle.Debug;
+using Cubicle.Entities;
 using Cubicle.Singletons;
 using Cubicle.Systems;
 using Microsoft.Xna.Framework;
@@ -51,6 +52,7 @@ namespace Cubicle {
             BlocksManager.LoadContent();
 
             _world = new WorldBuilder()
+                .AddSystem(new DebugPrepareSystem())
                 .AddSystem(new ChunkRequestSystem())
                 .AddSystem(new ChunkLoaderSystem(GraphicsDevice))
                 .AddSystem(new PrepareRenderSystem(GraphicsDevice))
@@ -61,12 +63,13 @@ namespace Cubicle {
                 .AddSystem(new ModelRenderSystem(GraphicsDevice))
                 .AddSystem(new ChunkRenderSystem(GraphicsDevice))
                 .AddSystem(new SteamSystem(AppID))
+                .AddSystem(new DebugRenderSystem(GraphicsDevice))
                 .Build();
 
             _entityFactory = new EntityFactory(_world);
 
+            _entityFactory.CreateDebugHandler();
             _entityFactory.CreateSettingsHandler();
-            _entityFactory.CreateBlockHandler();
             _entityFactory.CreateChunkHandler();
             _entityFactory.CreatePlayer();
 

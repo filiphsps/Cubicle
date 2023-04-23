@@ -8,10 +8,12 @@ namespace Cubicle.Entities {
         private readonly World _world;
         Renderable _renderable;
         ChunkRequester _chunkRequester;
+        DebugData _debugData;
 
         public EntityFactory(World world) {
             _world = world;
 
+            _debugData = new DebugData();
             _renderable = new Renderable() { Effect = Cubicle.Effect };
             _chunkRequester = new ChunkRequester() { };
         }
@@ -31,17 +33,18 @@ namespace Cubicle.Entities {
             return entity;
         }
 
+        public Entity CreateDebugHandler() {
+            Entity entity = _world.CreateEntity();
+            entity.Attach(_debugData);
+
+            return entity;
+        }
+
         public Entity CreateChunkHandler() {
             Entity entity = _world.CreateEntity();
             entity.Attach(_renderable);
             entity.Attach(_chunkRequester);
             entity.Attach(new Chunks());
-
-            return entity;
-        }
-
-        public Entity CreateBlockHandler() {
-            Entity entity = _world.CreateEntity();
 
             return entity;
         }
