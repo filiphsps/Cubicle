@@ -1,5 +1,4 @@
 ﻿using Cubicle.Components;
-using Cubicle.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Entities;

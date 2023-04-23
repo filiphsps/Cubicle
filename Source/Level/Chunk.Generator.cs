@@ -44,16 +44,14 @@ namespace Cubicle.Level {
             if (z != LAST) {
                 adjacent = Blocks.GetValueOrDefault(new Vector3(x, y, z + 1));
                 visibleFaces[0] = adjacent is null;
-            }
-            else {
+            } else {
                 visibleFaces[0] = true;
             }
 
             if (z != 0) {
                 adjacent = Blocks.GetValueOrDefault(new Vector3(x, y, z - 1));
                 visibleFaces[1] = adjacent is null;
-            }
-            else {
+            } else {
                 visibleFaces[1] = true;
             }
 
@@ -61,16 +59,14 @@ namespace Cubicle.Level {
             if (y != LAST) {
                 adjacent = Blocks.GetValueOrDefault(new Vector3(x, y + 1, z));
                 visibleFaces[2] = adjacent is null;
-            }
-            else {
+            } else {
                 visibleFaces[2] = true;
             };
 
             if (x != 0) {
                 adjacent = Blocks.GetValueOrDefault(new Vector3(x, y - 1, z));
                 visibleFaces[3] = adjacent is null;
-            }
-            else {
+            } else {
                 visibleFaces[3] = true;
             }
 
@@ -78,16 +74,14 @@ namespace Cubicle.Level {
             if (x != LAST) {
                 adjacent = Blocks.GetValueOrDefault(new Vector3(x + 1, y, z));
                 visibleFaces[4] = adjacent is null;
-            }
-            else {
+            } else {
                 visibleFaces[4] = true;
             };
 
             if (x != 0) {
                 adjacent = Blocks.GetValueOrDefault(new Vector3(x - 1, y, z));
                 visibleFaces[5] = adjacent is null;
-            }
-            else {
+            } else {
                 visibleFaces[5] = true;
             }
 

@@ -1,4 +1,3 @@
-using Cubicle.Components;
 using Cubicle.Rendering;
 using Cubicle.Singletons;
 using Microsoft.Xna.Framework.Graphics;

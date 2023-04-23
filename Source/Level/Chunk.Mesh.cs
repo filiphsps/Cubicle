@@ -57,8 +57,7 @@ namespace Cubicle.Level {
                 var textureCount = Atlas.TexturesCount;
                 if (vertex.TextureCoordinate.Y == 0) {
                     vertex.TextureCoordinate.Y = (float)texture / textureCount;
-                }
-                else {
+                } else {
                     vertex.TextureCoordinate.Y = (float)(texture + 1) / textureCount;
                 }
                 vertices.Add(vertex);
