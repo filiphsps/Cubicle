@@ -6,28 +6,10 @@ using Vector3 = System.Numerics.Vector3;
 namespace Cubicle.Level {
     public sealed partial class Chunk {
         public void Generate() {
-            if (Position.Y != 0)
+            Generator.Generate(this);
+
+            if (Blocks.Count <= 0)
                 return;
-
-            for (var x = 0; x < SIZE; x++) {
-                for (var y = 0; y < 6; y++) {
-                    for (var z = 0; z < SIZE; z++) {
-                        var pos = new Vector3(x, y, z);
-
-                        if (y == 5 && (x == 0 || x == LAST) && (z == 0 || z == LAST)) {
-                            Blocks.Add(pos + Vector3.UnitY, BlocksManager.GetBlock("border"));
-                            continue;
-                        }
-
-                        if (y == 5)
-                            Blocks.Add(pos, BlocksManager.GetBlock("grass"));
-                        else if (y == 0)
-                            Blocks.Add(pos, BlocksManager.GetBlock("border"));
-                        else
-                            Blocks.Add(pos, BlocksManager.GetBlock("dirt"));
-                    }
-                }
-            }
 
             Atlas = TexturesManager.GetAtlas(Blocks.Values.Distinct().ToList());
             this.CalculateMesh();

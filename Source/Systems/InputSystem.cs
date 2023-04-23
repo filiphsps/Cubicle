@@ -43,7 +43,7 @@ namespace Cubicle.Systems {
             InputHelper.UpdateSetup();
 
             foreach (var entityId in ActiveEntities) {
-                // TODO: figre out if this is actually okay
+                // TODO: figure out if this is actually okay
                 var input = _inputMapper.Get(entityId);
                 var currentMouseState = Mouse.GetState();
 

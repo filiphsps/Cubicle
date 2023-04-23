@@ -66,6 +66,9 @@ namespace Cubicle.Singletons {
             blockIds.Sort();
             var ids = blockIds.ToArray();
 
+            if (ids.Length <= 0)
+                throw new Exception("blockIds can't be empty!");
+
             if (ChunkAtlas.ContainsKey(ids))
                 return ChunkAtlas[ids];
 

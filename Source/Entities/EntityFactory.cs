@@ -17,7 +17,7 @@ namespace Cubicle.Entities {
 
         public Entity CreatePlayer() {
             Entity entity = _world.CreateEntity();
-            entity.Attach(new Transform() { Position = new Vector3(0, 10, 0) });
+            entity.Attach(new Transform() { Position = new Vector3(0, 45, 0) });
             entity.Attach(_renderable);
             entity.Attach(new Camera());
             entity.Attach(new Input());

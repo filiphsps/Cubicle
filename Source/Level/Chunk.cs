@@ -26,7 +26,12 @@ namespace Cubicle.Level {
 
             VertexList = new List<VertexPositionTextureLight>(total);
 
-            _buffer = new DynamicVertexBuffer(graphics, typeof(VertexPositionTextureLight), total * 6, BufferUsage.None);
+            _buffer = new DynamicVertexBuffer(graphics, typeof(VertexPositionTextureLight), total * 12, BufferUsage.None);
+        }
+
+        public int this[int x, int y, int z] {
+            get => Blocks[new Vector3(x, y, z)];
+            set => Blocks.Add(new Vector3(x, y, z), value);
         }
 
         public void Apply(GraphicsDevice graphics) {
