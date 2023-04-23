@@ -12,6 +12,8 @@
     <StartupObject>Cubicle.Program</StartupObject>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <FileVersion>0.0.0.1</FileVersion>
+    <AssemblyVersion>0.0.0.1</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Apos.Input" Version="2.4.2" />
@@ -50,6 +52,7 @@
     <None Include="$(SolutionDir)steam_appid.txt" CopyToOutputDirectory="Always" Link=".\steam_appid.txt" />
     <None Include="$(SolutionDir)steam_api.dll" CopyToOutputDirectory="Always" Link=".\steam_api.dll" />
     <None Include="$(SolutionDir)steam_api64.dll" CopyToOutputDirectory="Always" Link=".\steam_api64.dll" />
+    <None Include="C:\Users\filfa\Cubicle\Content\Fonts\primary_front.ttf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,6 +65,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Assets\Fonts\" />
     <Folder Include="Assets\Models\" />
     <Folder Include="Content\Models\" />
   </ItemGroup>

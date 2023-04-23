@@ -1,5 +1,4 @@
 ﻿using Cubicle.Components;
-using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using Vector3 = System.Numerics.Vector3;
 
@@ -8,12 +7,10 @@ namespace Cubicle.Entities {
         private readonly World _world;
         Renderable _renderable;
         ChunkRequester _chunkRequester;
-        DebugData _debugData;
 
         public EntityFactory(World world) {
             _world = world;
 
-            _debugData = new DebugData();
             _renderable = new Renderable() { Effect = Cubicle.Effect };
             _chunkRequester = new ChunkRequester() { };
         }
@@ -22,10 +19,7 @@ namespace Cubicle.Entities {
             Entity entity = _world.CreateEntity();
             entity.Attach(new Transform() { Position = new Vector3(0, 10, 0) });
             entity.Attach(_renderable);
-            entity.Attach(new Camera() {
-                Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(75),
-                (float)800 / 600, 0.1f, 1000f) // FIXME
-            });
+            entity.Attach(new Camera());
             entity.Attach(new Input());
             entity.Attach(new Player());
             entity.Attach(_chunkRequester);
@@ -35,7 +29,7 @@ namespace Cubicle.Entities {
 
         public Entity CreateDebugHandler() {
             Entity entity = _world.CreateEntity();
-            entity.Attach(_debugData);
+            entity.Attach(new Debug());
 
             return entity;
         }

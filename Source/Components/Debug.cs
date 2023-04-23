@@ -1,5 +1,4 @@
 ﻿namespace Cubicle.Components {
-    public class DebugData {
+    public class Debug {
     }
 }
-

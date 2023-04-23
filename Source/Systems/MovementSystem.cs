@@ -1,4 +1,6 @@
 ﻿using Cubicle.Components;
+using Cubicle.Level;
+using Cubicle.Singletons;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
@@ -118,6 +120,13 @@ namespace Cubicle.Systems {
 
                 transform.Position += position_delta * delta;
                 transform.Velocity = velocity;
+
+                DebugManager.Text($"XYZ: {transform.Position.X.ToString("0.0")} / {transform.Position.Y.ToString("0.0")} / {transform.Position.Z.ToString("0.0")}");
+                var block = Block.ToRelative(transform.Position);
+                var chunk = Chunk.ToRelative(transform.Position);
+                DebugManager.Text($"Chunk: {block.X} {block.Y} {block.Z} in {chunk.X} {chunk.Y} {chunk.Z}");
+                DebugManager.Text($"Vel: {velocity.X.ToString("0.0")} {velocity.Y.ToString("0.0")} {velocity.Z.ToString("0.0")}");
+                DebugManager.Div();
             }
         }
     }

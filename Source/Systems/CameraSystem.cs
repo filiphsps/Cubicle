@@ -1,4 +1,5 @@
 ﻿using Cubicle.Components;
+using Cubicle.Singletons;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
@@ -28,9 +29,14 @@ namespace Cubicle.Systems {
             if (transform != null) {
                 camera.Position = transform.Position;
                 camera.Forward = transform.Forward;
+                camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(75),
+                    (float)Cubicle.Viewport.Width / Cubicle.Viewport.Height, 0.1f, 1000f);
             }
 
             camera.View = Matrix.CreateLookAt(camera.Position, camera.Position + camera.Forward, camera.Up);
+
+            DebugManager.Text($"{camera.Direction}");
+            DebugManager.Div();
         }
     }
 }

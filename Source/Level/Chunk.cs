@@ -37,5 +37,9 @@ namespace Cubicle.Level {
                 return Atlas.Texture;
             }
         }
+
+        public static Vector3 ToRelative(Vector3 position) {
+            return new Vector3((int)position.X >> 4, (int)position.Y >> 4, (int)position.Z >> 4);
+        }
     }
 }

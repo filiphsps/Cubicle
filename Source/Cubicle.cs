@@ -1,7 +1,7 @@
-﻿using Cubicle.Debug;
-using Cubicle.Entities;
+﻿using Cubicle.Entities;
 using Cubicle.Singletons;
 using Cubicle.Systems;
+using Cubicle.Systems.Debug;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -13,6 +13,7 @@ namespace Cubicle {
     public class Cubicle : Game {
         public uint AppID = 1882990;
 
+        public static Viewport Viewport;
         // TODO: ShaderManager
         public static BasicEffect Effect;
 
@@ -25,8 +26,8 @@ namespace Cubicle {
 
         public Cubicle() {
             _graphics = new GraphicsDeviceManager(this) {
-                PreferredBackBufferWidth = 800,
-                PreferredBackBufferHeight = 600,
+                PreferredBackBufferWidth = 1366,
+                PreferredBackBufferHeight = 768,
                 IsFullScreen = false,
                 SynchronizeWithVerticalRetrace = false
             };
@@ -35,6 +36,9 @@ namespace Cubicle {
             IsMouseVisible = false;
 
             Window.AllowUserResizing = true;
+            Window.ClientSizeChanged += (Object sender, EventArgs args) => {
+                Viewport = GraphicsDevice.Viewport;
+            };
 
             Content.RootDirectory = "Assets";
         }
@@ -44,9 +48,11 @@ namespace Cubicle {
         }
 
         protected override void LoadContent() {
-            GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            DebugManager.Initialize(_graphics, GraphicsDevice);
+            DebugManager.Font = Content.Load<SpriteFont>("Fonts/primary_font");
 
             Effect = new BasicEffect(GraphicsDevice);
+            Viewport = GraphicsDevice.Viewport;
 
             TexturesManager.LoadContent(GraphicsDevice);
             BlocksManager.LoadContent();
@@ -63,7 +69,7 @@ namespace Cubicle {
                 .AddSystem(new ModelRenderSystem(GraphicsDevice))
                 .AddSystem(new ChunkRenderSystem(GraphicsDevice))
                 .AddSystem(new SteamSystem(AppID))
-                .AddSystem(new DebugRenderSystem(GraphicsDevice))
+                .AddSystem(new DebugRenderSystem())
                 .Build();
 
             _entityFactory = new EntityFactory(_world);

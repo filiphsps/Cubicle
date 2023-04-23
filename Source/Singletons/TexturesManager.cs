@@ -40,12 +40,12 @@ namespace Cubicle.Singletons {
 
     public static class TexturesManager {
         private static GraphicsDevice _graphics;
-        private static Dictionary<String, Texture2D> _blockTextures;
-        private static Dictionary<int[], Atlas> _chunkAtlas;
+        public static Dictionary<String, Texture2D> BlockTextures;
+        public static Dictionary<int[], Atlas> ChunkAtlas;
 
         static TexturesManager() {
-            _blockTextures = new Dictionary<String, Texture2D>();
-            _chunkAtlas = new Dictionary<int[], Atlas>(new IdsArrayComparer());
+            BlockTextures = new Dictionary<String, Texture2D>();
+            ChunkAtlas = new Dictionary<int[], Atlas>(new IdsArrayComparer());
         }
 
         public static void LoadContent(GraphicsDevice graphics) {
@@ -57,7 +57,7 @@ namespace Cubicle.Singletons {
                 var key = texture.Split('\\')[1].Split('.')[0];
 
                 FileStream stream = new FileStream(texture, FileMode.Open);
-                _blockTextures.Add(key, Texture2D.FromStream(_graphics, stream));
+                BlockTextures.Add(key, Texture2D.FromStream(_graphics, stream));
                 stream.Dispose();
             }
         }
@@ -66,8 +66,8 @@ namespace Cubicle.Singletons {
             blockIds.Sort();
             var ids = blockIds.ToArray();
 
-            if (_chunkAtlas.ContainsKey(ids))
-                return _chunkAtlas[ids];
+            if (ChunkAtlas.ContainsKey(ids))
+                return ChunkAtlas[ids];
 
             Console.WriteLine("GetAtlas: MISS - [{0}]", String.Join(";", ids));
 
@@ -92,7 +92,7 @@ namespace Cubicle.Singletons {
             var texture_indices = new Dictionary<String, ushort>();
             for (ushort i = 0; i < textures_to_add.Count; i++) {
                 var name = textures_to_add[i];
-                var block_texture = _blockTextures[name];
+                var block_texture = BlockTextures[name];
 
                 Color[] color = new Color[block_texture.Width * block_texture.Height];
                 block_texture.GetData(color);
@@ -126,12 +126,12 @@ namespace Cubicle.Singletons {
                 }
             }
 
-            _chunkAtlas.Add(ids, new Atlas() with {
+            ChunkAtlas.Add(ids, new Atlas() with {
                 Texture = texture,
                 TexturesCount = texture_indices.Count,
                 BlockIndices = block_indices
             });
-            return _chunkAtlas[ids];
+            return ChunkAtlas[ids];
         }
     }
 }
