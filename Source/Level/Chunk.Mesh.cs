@@ -14,13 +14,16 @@ namespace Cubicle.Level {
         public void CalculateMesh() {
             bool[] visibleFaces = new bool[6];
 
-            foreach (var block in Blocks.Values) {
-                var textures = Atlas.BlockIndices[block.Id];
-                visibleFaces = GetVisibleFaces(visibleFaces, block);
+            foreach (var entry in Blocks) {
+                var block = entry.Value;
+                var position = entry.Key;
+
+                var textures = Atlas.BlockIndices[block];
+                visibleFaces = GetVisibleFaces(visibleFaces, position);
 
                 for (int face = 0; face < 6; face++) {
                     if (visibleFaces[face]) {
-                        AddFaceMesh(block, face, textures[face]);
+                        AddFaceMesh(position, face, textures[face]);
                     }
                 }
             }
@@ -31,13 +34,12 @@ namespace Cubicle.Level {
 
             _buffer.SetData(Vertices);
         }
-        void AddFaceMesh(BlockReference block, int face, ushort? texture) {
-            AddData(VertexList, face, block, texture);
+        void AddFaceMesh(Vector3 position, int face, ushort? texture) {
+            AddData(VertexList, face, position, texture);
         }
 
-        void AddData(List<VertexPositionTextureLight> vertices, int face, BlockReference block, ushort? texture) {
-            var position = block.Position;
-            var world_pos = new Vector3(Position.X * 16, Position.Y, Position.Z * 16) + position;
+        void AddData(List<VertexPositionTextureLight> vertices, int face, Vector3 position, ushort? texture) {
+            var world_pos = new Vector3(Position.X * 16, Position.Y * 16, Position.Z * 16) + position;
 
             for (int i = 0; i < 6; i++) {
                 VertexPositionTextureLight vertex = Cube.Faces[face][i];

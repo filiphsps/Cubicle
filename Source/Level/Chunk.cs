@@ -10,7 +10,7 @@ namespace Cubicle.Level {
         // FIXME: Multiple blocks can occupy same slot
 
         public Vector3 Position;
-        public Dictionary<Vector3, BlockReference> Blocks = new Dictionary<Vector3, BlockReference>();
+        public Dictionary<Vector3, int> Blocks = new Dictionary<Vector3, int>();
 
         private DynamicVertexBuffer _buffer;
         private GraphicsDevice _graphics;
@@ -26,7 +26,7 @@ namespace Cubicle.Level {
 
             VertexList = new List<VertexPositionTextureLight>(total);
 
-            _buffer = new DynamicVertexBuffer(graphics, typeof(VertexPositionTextureLight), total * 4, BufferUsage.None);
+            _buffer = new DynamicVertexBuffer(graphics, typeof(VertexPositionTextureLight), total * 6, BufferUsage.None);
         }
 
         public void Apply(GraphicsDevice graphics) {
