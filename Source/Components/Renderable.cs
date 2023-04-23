@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Vector3 = System.Numerics.Vector3;
 
 namespace Cubicle.Components {
     public class Renderable {
@@ -7,6 +7,7 @@ namespace Cubicle.Components {
         public Matrix View;
         public Matrix Projection;
 
-        public Effect Effect;
+        public Vector3 CameraPosition;
+        public Vector3 Direction;
     }
 }

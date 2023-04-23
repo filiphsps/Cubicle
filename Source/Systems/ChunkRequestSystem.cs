@@ -27,7 +27,7 @@ namespace Cubicle.Systems {
                 return;
 
             var distance = 6;
-            var distance_y = 1;
+            var distance_y = 2;
 
             var center_x = (int)transform.Position.X >> 4;
             var center_z = (int)transform.Position.Z >> 4;

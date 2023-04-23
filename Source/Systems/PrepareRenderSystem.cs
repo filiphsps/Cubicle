@@ -6,7 +6,9 @@ using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Vector3 = System.Numerics.Vector3;
 
 namespace Cubicle.Systems {
     public class PrepareRenderSystem : EntityUpdateSystem {
@@ -36,6 +38,9 @@ namespace Cubicle.Systems {
                 renderable.World = Matrix.Identity;
                 renderable.View = camera.View;
                 renderable.Projection = camera.Projection;
+
+                renderable.CameraPosition = camera.Position;
+                renderable.Direction = Vector3.Normalize(camera.Forward);
             }
 
             DebugManager.Text($"{Math.Floor(1.0f / gameTime.GetElapsedSeconds())} FPS");
@@ -45,10 +50,13 @@ namespace Cubicle.Systems {
             DebugManager.Text($"Runtime: {typeof(string).Assembly.ImageRuntimeVersion}", true);
             DebugManager.Div(true);
 
-            var memory = GC.GetGCMemoryInfo().TotalAvailableMemoryBytes / (1024 * 1024);
-            var used_memory = GC.GetTotalMemory(false) / (1024 * 1024);
-            var allocated = GC.GetTotalAllocatedBytes(true) / (1024 * 1024);
-            DebugManager.Text($"Memory: {(used_memory / memory).ToString("0%")} {used_memory}/{memory}MB", true);
+            // TODO: Utility class to convert bytes to readable
+            var memory = Math.Round((double)(GC.GetGCMemoryInfo().TotalAvailableMemoryBytes / (1024 * 1024)), 2);
+            Process process = Process.GetCurrentProcess();
+            var used_memory = Math.Round((double)(process.WorkingSet64 / (1024 * 1024)), 2);
+            var allocated = Math.Round((double)(process.PrivateMemorySize64 / (1024 * 1024)), 2);
+
+            DebugManager.Text($"Memory: {used_memory}/{memory}MB {((used_memory / memory) * 100).ToString("0")}%", true);
             DebugManager.Text($"Allocated: {allocated}MB", true);
             DebugManager.Div(true);
 

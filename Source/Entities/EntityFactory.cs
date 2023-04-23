@@ -11,7 +11,7 @@ namespace Cubicle.Entities {
         public EntityFactory(World world) {
             _world = world;
 
-            _renderable = new Renderable() { Effect = Cubicle.Effect };
+            _renderable = new Renderable() { };
             _chunkRequester = new ChunkRequester() { };
         }
 

@@ -38,7 +38,7 @@ namespace Cubicle.Systems {
                 buffer.SetData(mesh.Vertices);
                 _graphics.SetVertexBuffer(buffer);
 
-                foreach (EffectPass pass in renderable.Effect.CurrentTechnique.Passes) {
+                foreach (EffectPass pass in Cubicle.Effect.CurrentTechnique.Passes) {
                     pass.Apply();
                     _graphics.DrawPrimitives(PrimitiveType.TriangleList, 0, mesh.VertexList.Count / 3);
                 }
