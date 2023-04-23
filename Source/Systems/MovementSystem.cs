@@ -1,6 +1,5 @@
 ﻿using Cubicle.Components;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using System;
@@ -44,33 +43,29 @@ namespace Cubicle.Systems {
                 var velocity = transform.Velocity;
                 var position_delta = Vector3.Zero;
 
+                if (Math.Abs(velocity.X) > 5e-3f) {
+                    velocity.X -= Math.Sign(velocity.X) * friction * acceleration * delta;
+                } else {
+                    velocity.X = 0;
+                }
+
                 if (Math.Abs(velocity.Y) > 5e-3f) {
                     velocity.Y -= Math.Sign(velocity.Y) * friction * acceleration * delta;
-                }
-                else {
+                } else {
                     velocity.Y = 0;
                     friction = 0.25f;
                 }
 
-                if (Math.Abs(velocity.X) > 5e-3f) {
-                    velocity.X -= Math.Sign(velocity.X) * friction * acceleration * delta;
-                }
-                else {
-                    velocity.X = 0;
-                }
-
                 if (Math.Abs(velocity.Z) > 5e-3f) {
                     velocity.Z -= Math.Sign(velocity.Z) * friction * acceleration * delta;
-                }
-                else {
+                } else {
                     velocity.Z = 0;
                 }
 
                 if (input.Forward == Components.KeyState.Pressed) {
                     if (Math.Abs(velocity.X) < speed) {
                         velocity.X += acceleration * delta;
-                    }
-                    else {
+                    } else {
                         velocity.X = speed;
                     }
                 }
@@ -78,8 +73,7 @@ namespace Cubicle.Systems {
                 if (input.Backward == Components.KeyState.Pressed) {
                     if (Math.Abs(velocity.X) < speed) {
                         velocity.X -= acceleration * delta;
-                    }
-                    else {
+                    } else {
                         velocity.X = -speed;
                     }
                 }
@@ -87,8 +81,7 @@ namespace Cubicle.Systems {
                 if (input.Left == Components.KeyState.Pressed) {
                     if (Math.Abs(velocity.Z) < speed) {
                         velocity.Z += acceleration * delta;
-                    }
-                    else {
+                    } else {
                         velocity.Z = speed;
                     }
                 }
@@ -96,8 +89,7 @@ namespace Cubicle.Systems {
                 if (input.Right == Components.KeyState.Pressed) {
                     if (Math.Abs(velocity.Z) < speed) {
                         velocity.Z -= acceleration * delta;
-                    }
-                    else {
+                    } else {
                         velocity.Z = -speed;
                     }
                 }
@@ -106,7 +98,7 @@ namespace Cubicle.Systems {
                     if (velocity.Y < 2 * speed) {
                         velocity.Y += 2 * acceleration * delta;
                     }
-                    position_delta.Y += velocity.Y;
+                    position_delta.Y = speed;
                 }
 
                 if (input.Down == Components.KeyState.Pressed) {
@@ -114,7 +106,7 @@ namespace Cubicle.Systems {
                         velocity.Y += 2 * acceleration * delta;
                     }
 
-                    position_delta.Y -= velocity.Y;
+                    position_delta.Y = -speed;
                 }
 
                 // TODO: Move this to PhysicsSystem
