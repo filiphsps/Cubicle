@@ -8,6 +8,14 @@ jobs:
 
         steps:
             - uses: actions/checkout@v3
+            - name: Cache
+              uses: actions/cache@v3
+              with:
+                  path: ~/.nuget/packages
+                  key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+                  restore-keys: |
+                      ${{ runner.os }}-nuget-
+
             - name: Setup .NET Core SDK 7.0.x
               uses: actions/setup-dotnet@v3
               with:
