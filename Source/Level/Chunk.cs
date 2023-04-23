@@ -6,6 +6,9 @@ using System.Numerics;
 
 namespace Cubicle.Level {
     public sealed partial class Chunk {
+        // TODO: Improve block adding
+        // FIXME: Multiple blocks can occupy same slot
+
         public Vector3 Position;
         public Dictionary<Vector3, BlockReference> Blocks = new Dictionary<Vector3, BlockReference>();
 
@@ -23,7 +26,7 @@ namespace Cubicle.Level {
 
             VertexList = new List<VertexPositionTextureLight>(total);
 
-            _buffer = new DynamicVertexBuffer(graphics, typeof(VertexPositionTextureLight), total + 3000, BufferUsage.None);
+            _buffer = new DynamicVertexBuffer(graphics, typeof(VertexPositionTextureLight), total * 4, BufferUsage.None);
         }
 
         public void Apply(GraphicsDevice graphics) {

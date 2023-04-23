@@ -45,15 +45,6 @@ namespace Cubicle.Level {
                 vertex.Normal = world_pos;
                 vertex.Color = Color.White;
 
-                if (position.X == 15 && position.Z == 15)
-                    vertex.Color = Color.Blue;
-                else if (position.X == 15 && position.Z == 0)
-                    vertex.Color = Color.Red;
-                else if (position.X == 0 && position.Z == 15)
-                    vertex.Color = Color.Yellow;
-                else if (position.X == 0 && position.Z == 0)
-                    vertex.Color = Color.Purple;
-
                 var textureCount = Atlas.TexturesCount;
                 if (vertex.TextureCoordinate.Y == 0) {
                     vertex.TextureCoordinate.Y = (float)texture / textureCount;

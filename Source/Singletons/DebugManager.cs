@@ -45,6 +45,10 @@ namespace Cubicle.Singletons {
         }
 
         public static void EndDraw() {
+            // TODO: Support multilines
+            // this could be done by just splitting the string
+            // at "\".
+
             _primaryText.Insert(0, $"Cubicle {System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}");
             _primaryText.Insert(2, $"Entities: {_currentWorld.EntityCount}");
             // TODO: Debug entities

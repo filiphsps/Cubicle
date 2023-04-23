@@ -56,8 +56,10 @@ namespace Cubicle.Systems {
             DebugManager.Text(GraphicsAdapter.DefaultAdapter.Description, true);
             DebugManager.Div(true);
 
+            DebugManager.Text($"Blocks: {String.Join(", ", BlocksManager.BlockNameMap)}", true);
             DebugManager.Text($"{TexturesManager.BlockTextures.Count} texture(s), " +
                 $"{TexturesManager.ChunkAtlas.Count} atlas(es)", true);
+            DebugManager.Div(true);
         }
     }
 }

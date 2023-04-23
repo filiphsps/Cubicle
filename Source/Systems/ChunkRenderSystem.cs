@@ -26,6 +26,7 @@ namespace Cubicle.Systems {
                 var renderable = _renderableMapper.Get(entityId);
                 var chunks = _chunksMapper.Get(entityId);
 
+                // TODO: Don't render chunks behind the player
                 foreach (var chunk in chunks.LoadedChunks.Values) {
                     if (!chunk.Blocks.Any())
                         continue;
@@ -36,7 +37,7 @@ namespace Cubicle.Systems {
                             * Matrix.CreateRotationX(0)
                             * Matrix.CreateRotationY(0)
                             * Matrix.CreateRotationZ(0)
-                            * Matrix.CreateTranslation(world_pos + new Vector3(0.5f, 0.5f, 0.5f));
+                            * Matrix.CreateTranslation(world_pos + new Vector3(0.5f, 0.5f, 0.5f)); // FIXME: Should cords be centered?
 
                     Cubicle.Effect.World = renderable.World * model_matrix;
                     Cubicle.Effect.View = renderable.View;

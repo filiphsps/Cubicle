@@ -55,13 +55,18 @@ namespace Cubicle.Systems {
                 input.Up = _up.Held() ? KeyState.Pressed : KeyState.Released;
                 input.Down = _down.Held() ? KeyState.Pressed : KeyState.Released;
 
-                input.MouseDelta = new Vector2(currentMouseState.X, currentMouseState.Y) -
-                    input.LastMousePointer;
+
+                float delta = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 20f;
+                input.MouseDelta = delta * (new Vector2(currentMouseState.X, currentMouseState.Y) -
+                    new Vector2(input.LastMousePointer.X, input.LastMousePointer.Y));
+                input.MouseDelta = Vector2.Clamp(input.MouseDelta, new Vector2(-20, -20), new Vector2(20, 20));
+                input.MouseDelta *= 2.5f; // Rotation speed
 
                 if ((new Vector2(currentMouseState.X, currentMouseState.Y) - new Vector2(400, 300)).Length() > 200) {
                     Mouse.SetPosition(400, 300);
                     currentMouseState = Mouse.GetState();
                 }
+
                 input.MousePointer = new Vector2(currentMouseState.X, currentMouseState.Y);
                 input.LastMousePointer = input.MousePointer;
             }

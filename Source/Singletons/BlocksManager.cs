@@ -5,8 +5,8 @@ using System.Collections.Generic;
 namespace Cubicle.Singletons {
     public static class BlocksManager {
         // TODO: uint?
-        private static Dictionary<int, Block> BlockMap;
-        private static List<String> BlockNameMap;
+        public static Dictionary<int, Block> BlockMap;
+        public static List<String> BlockNameMap;
 
         static BlocksManager() {
             BlockMap = new Dictionary<int, Block>();

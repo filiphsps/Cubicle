@@ -15,6 +15,13 @@ namespace Cubicle.Level {
                     for (var z = 0; z < 16; z++) {
                         var pos = new Vector3(x, y, z);
 
+                        // TODO: Way to get dyanmic chunk size
+                        //  instead if hardcoding 15.
+                        if (y == 5 && (x == 0 || x == 15) && (z == 0 || z == 15)) {
+                            Blocks.Add(pos, new BlockReference("border") { Position = pos + Vector3.UnitY });
+                            continue;
+                        }
+
                         if (y == 5)
                             Blocks.Add(pos, new BlockReference("grass") { Position = pos });
                         else if (y == 0)

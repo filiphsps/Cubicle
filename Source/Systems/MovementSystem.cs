@@ -4,7 +4,6 @@ using Cubicle.Singletons;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
-using System;
 using System.Numerics;
 using Vector3 = System.Numerics.Vector3;
 
@@ -37,95 +36,42 @@ namespace Cubicle.Systems {
                 transform.Forward = Vector3.Normalize(transform.Forward);
 
                 float delta = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-                float speed = 0.01f;
-                float acceleration = 0.015f;
-                float friction = 0.5f;
-
-                var velocity = transform.Velocity;
-                var position_delta = Vector3.Zero;
-
-                if (Math.Abs(velocity.X) > 5e-3f) {
-                    velocity.X -= Math.Sign(velocity.X) * friction * acceleration * delta;
-                } else {
-                    velocity.X = 0;
-                }
-
-                if (Math.Abs(velocity.Y) > 5e-3f) {
-                    velocity.Y -= Math.Sign(velocity.Y) * friction * acceleration * delta;
-                } else {
-                    velocity.Y = 0;
-                    friction = 0.25f;
-                }
-
-                if (Math.Abs(velocity.Z) > 5e-3f) {
-                    velocity.Z -= Math.Sign(velocity.Z) * friction * acceleration * delta;
-                } else {
-                    velocity.Z = 0;
-                }
+                var position = Vector3.Zero;
+                var speed = 0.01f;
 
                 if (input.Forward == Components.KeyState.Pressed) {
-                    if (Math.Abs(velocity.X) < speed) {
-                        velocity.X += acceleration * delta;
-                    } else {
-                        velocity.X = speed;
-                    }
+                    position += new Vector3(1, 0, 0);
                 }
 
                 if (input.Backward == Components.KeyState.Pressed) {
-                    if (Math.Abs(velocity.X) < speed) {
-                        velocity.X -= acceleration * delta;
-                    } else {
-                        velocity.X = -speed;
-                    }
+                    position += new Vector3(-1, 0, 0);
                 }
 
                 if (input.Left == Components.KeyState.Pressed) {
-                    if (Math.Abs(velocity.Z) < speed) {
-                        velocity.Z += acceleration * delta;
-                    } else {
-                        velocity.Z = speed;
-                    }
+                    position += new Vector3(0, 0, 1);
                 }
 
                 if (input.Right == Components.KeyState.Pressed) {
-                    if (Math.Abs(velocity.Z) < speed) {
-                        velocity.Z -= acceleration * delta;
-                    } else {
-                        velocity.Z = -speed;
-                    }
+                    position += new Vector3(0, 0, -1);
                 }
 
                 if (input.Up == Components.KeyState.Pressed) {
-                    if (velocity.Y < 2 * speed) {
-                        velocity.Y += 2 * acceleration * delta;
-                    }
-                    position_delta.Y = speed;
+                    transform.Position += delta * speed * new Vector3(0, 1, 0);
                 }
 
                 if (input.Down == Components.KeyState.Pressed) {
-                    if (velocity.Y < 2 * speed) {
-                        velocity.Y += 2 * acceleration * delta;
-                    }
-
-                    position_delta.Y = -speed;
+                    transform.Position += delta * speed * new Vector3(0, -1, 0);
                 }
 
-                // TODO: Move this to PhysicsSystem
-
-                var horizontal = Vector3.Normalize(new Vector3(transform.Forward.X, 0, transform.Forward.Z));
-
-                position_delta += velocity.X * horizontal;
-                position_delta += velocity.Z * Vector3.Cross(Vector3.UnitY, horizontal);
-
-                transform.Position += position_delta * delta;
-                transform.Velocity = velocity;
+                // TODO: physics-based movement
+                var horizontal = Vector3.Normalize(transform.Forward);
+                transform.Position += delta * speed * position.X * transform.Forward;
+                transform.Position += delta * speed * position.Z * Vector3.Cross(Vector3.UnitY, horizontal);
 
                 DebugManager.Text($"XYZ: {transform.Position.X.ToString("0.0")} / {transform.Position.Y.ToString("0.0")} / {transform.Position.Z.ToString("0.0")}");
                 var block = Block.ToRelative(transform.Position);
                 var chunk = Chunk.ToRelative(transform.Position);
                 DebugManager.Text($"Chunk: {block.X} {block.Y} {block.Z} in {chunk.X} {chunk.Y} {chunk.Z}");
-                DebugManager.Text($"Vel: {velocity.X.ToString("0.0")} {velocity.Y.ToString("0.0")} {velocity.Z.ToString("0.0")}");
                 DebugManager.Div();
             }
         }

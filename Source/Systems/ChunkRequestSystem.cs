@@ -26,7 +26,8 @@ namespace Cubicle.Systems {
             if (requester.RequestedChunks.Count > 0)
                 return;
 
-            var distance = 4;
+            var distance = 6;
+            var distance_y = 1;
 
             var center_x = (int)transform.Position.X >> 4;
             var center_z = (int)transform.Position.Z >> 4;
@@ -36,8 +37,9 @@ namespace Cubicle.Systems {
             var end_x = (int)center_x + distance;
             var start_z = (int)center_z + -distance;
             var end_z = (int)center_z + distance;
-            var start_y = (int)center_y + -distance;
-            var end_y = (int)center_y + distance;
+
+            var start_y = (int)center_y + -distance_y;
+            var end_y = (int)center_y + distance_y;
 
             for (var x = start_x; x < end_x; x++) {
                 for (var z = start_z; z < end_z; z++) {
