@@ -19,6 +19,7 @@ namespace Cubicle.Singletons {
         private static List<String> _primaryText;
         private static List<String> _secondaryText;
 
+        private static Vector2 _padding = new Vector2(16, 16);
         private static Color _background = new Color(0, 0, 0, 145);
         private static Color _foreground = Color.White;
 
@@ -54,24 +55,37 @@ namespace Cubicle.Singletons {
             // TODO: Debug entities
 
             // Primary debug info
+            float y = 0;
             for (var i = 0; i < _primaryText.Count; i++) {
                 var text = _primaryText[i];
-                var size = Font.MeasureString(text);
-                var y = i * size.Y;
+                if (text.Length == 0) {
+                    y += _padding.Y * 2;
+                    continue;
+                }
 
-                _spriteBatch.FillRectangle(new RectangleF(0, y, size.X + 8, size.Y), _background);
-                _spriteBatch.DrawString(Font, text, new Vector2(4, y + 2), _foreground);
+                var size = Font.MeasureString(text);
+
+                _spriteBatch.FillRectangle(new RectangleF(0, y, size.X + _padding.X, size.Y + _padding.Y), _background);
+                _spriteBatch.DrawString(Font, text, new Vector2(_padding.X / 2, y + 2 + _padding.Y / 2), _foreground);
+
+                y += size.Y + _padding.Y;
             }
 
             // Secondary debug info
+            y = 0;
             for (var i = 0; i < _secondaryText.Count; i++) {
                 var text = _secondaryText[i];
+                if (text.Length == 0) {
+                    y += _padding.Y * 2;
+                    continue;
+                }
+
                 var size = Font.MeasureString(text);
-                var y = i * size.Y;
                 var x = _graphics.Viewport.Width - size.X;
 
-                _spriteBatch.FillRectangle(new RectangleF(x - 8, y, size.X + 8, size.Y), _background);
-                _spriteBatch.DrawString(Font, text, new Vector2(x - 2, y + 2), _foreground);
+                _spriteBatch.FillRectangle(new RectangleF(x - _padding.X, y, size.X + _padding.X, size.Y + _padding.Y), _background);
+                _spriteBatch.DrawString(Font, text, new Vector2(x - _padding.X / 2, y + 2 + _padding.Y / 2), _foreground);
+                y += size.Y + _padding.Y;
             }
 
             _spriteBatch.End();
