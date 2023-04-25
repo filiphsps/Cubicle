@@ -30,7 +30,7 @@ jobs:
             - uses: actions/upload-artifact@v2
               with:
                   name: win64
-                  path: bin/Release/net7.0
+                  path: bin/Release/net7.0-windows
 
     deploy:
         runs-on: ubuntu-latest
@@ -46,7 +46,7 @@ jobs:
               uses: actions/download-artifact@v2
               with:
                   name: win64
-                  path: bin/Release/net7.0
+                  path: bin/Release/net7.0-windows
 
             - name: Publish
               uses: filiphsps/steam-deploy@main
@@ -56,5 +56,5 @@ jobs:
                   appId: 1882990
                   buildDescription: '[CI] ${{ github.event.head_commit.message }}'
                   rootPath: bin
-                  depot2Path: Release/net7.0
+                  depot2Path: Release/net7.0-windows
                   releaseBranch: prerelease

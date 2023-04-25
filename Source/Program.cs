@@ -1,21 +1,17 @@
-﻿#if _WINDOWS && DEBUG
-using System.Runtime.InteropServices;
-#endif
+﻿using System;
 
 namespace Cubicle {
     class Program {
-
-        public static void Main() {
-#if _WINDOWS && DEBUG
-            [DllImport("kernel32.dll", SetLastError = true)]
-            [return: MarshalAs(UnmanagedType.Bool)]
-            static extern bool AllocConsole();
-
-            AllocConsole();
+#if USE_GEARSET
+        [STAThread]
 #endif
-
+        public static void Main() {
             using (var game = new Cubicle())
                 game.Run();
+
+#if USE_GEARSET
+            Environment.Exit(0);
+#endif
         }
     }
 }

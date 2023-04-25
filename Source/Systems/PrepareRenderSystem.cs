@@ -1,4 +1,5 @@
 ﻿using Cubicle.Components;
+using Cubicle.Gearset;
 using Cubicle.Singletons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -41,6 +42,8 @@ namespace Cubicle.Systems {
 
                 renderable.CameraPosition = camera.Position;
                 renderable.Direction = Vector3.Normalize(camera.Forward);
+
+                GS.SetMatrices(ref renderable.World, ref renderable.View, ref renderable.Projection);
             }
 
             DebugManager.Text($"{Math.Floor(1.0f / gameTime.GetElapsedSeconds())} FPS");

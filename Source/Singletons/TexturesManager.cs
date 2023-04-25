@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Cubicle.Gearset;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -72,7 +73,7 @@ namespace Cubicle.Singletons {
             if (ChunkAtlas.ContainsKey(ids))
                 return ChunkAtlas[ids];
 
-            Console.WriteLine("GetAtlas: MISS - [{0}]", String.Join(";", ids));
+            GS.Log($"GetAtlas: MISS - [{String.Join(";", ids)}]");
 
             // Figure out which textures to add to the atlas
             // Some blocks may have more than one texture (multiface)

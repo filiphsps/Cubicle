@@ -1,4 +1,5 @@
 ﻿using Cubicle.Components;
+using Cubicle.Gearset;
 using Cubicle.Level;
 using Cubicle.Singletons;
 using Microsoft.Xna.Framework;
@@ -9,8 +10,6 @@ using Vector3 = System.Numerics.Vector3;
 
 namespace Cubicle.Systems {
     public class MovementSystem : EntityUpdateSystem {
-        Game _game;
-
         private ComponentMapper<Input> _inputMapper;
         private ComponentMapper<Transform> _transformMapper;
 
@@ -24,6 +23,7 @@ namespace Cubicle.Systems {
         }
 
         public override void Update(GameTime gameTime) {
+            GS.BeginMark("Movement", Color.YellowGreen);
             foreach (var entityId in ActiveEntities) {
                 var input = _inputMapper.Get(entityId);
                 var transform = _transformMapper.Get(entityId);
@@ -74,6 +74,7 @@ namespace Cubicle.Systems {
                 DebugManager.Text($"Chunk: {block.X} {block.Y} {block.Z} in {chunk.X} {chunk.Y} {chunk.Z}");
                 DebugManager.Div();
             }
+            GS.EndMark("Movement");
         }
     }
 }

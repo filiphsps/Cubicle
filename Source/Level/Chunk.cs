@@ -6,9 +6,6 @@ using System.Numerics;
 
 namespace Cubicle.Level {
     public sealed partial class Chunk {
-        // TODO: Improve block adding
-        // FIXME: Multiple blocks can occupy same slot
-
         public Vector3 Position;
         public Dictionary<Vector3, int> Blocks = new Dictionary<Vector3, int>();
 

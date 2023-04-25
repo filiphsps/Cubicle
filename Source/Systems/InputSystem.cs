@@ -47,6 +47,12 @@ namespace Cubicle.Systems {
                 var input = _inputMapper.Get(entityId);
                 var currentMouseState = Mouse.GetState();
 
+                if (!input.Enabled) {
+                    input.MousePointer = new Vector2(currentMouseState.X, currentMouseState.Y);
+                    input.LastMousePointer = input.MousePointer;
+                    return;
+                }
+
                 input.Forward = _forward.Held() ? KeyState.Pressed : KeyState.Released;
                 input.Backward = _backward.Held() ? KeyState.Pressed : KeyState.Released;
                 input.Left = _left.Held() ? KeyState.Pressed : KeyState.Released;

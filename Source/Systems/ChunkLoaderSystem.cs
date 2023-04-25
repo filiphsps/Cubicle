@@ -1,4 +1,5 @@
 using Cubicle.Components;
+using Cubicle.Gearset;
 using Cubicle.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,6 +24,7 @@ namespace Cubicle.Systems {
         }
 
         public override void Process(GameTime gameTime, int entityId) {
+            GS.BeginMark("ChunkLoaderSystem", Color.Magenta);
             var chunks = _chunksMapper.Get(entityId);
             var requester = _requesterMapper.Get(entityId);
 
@@ -33,7 +35,10 @@ namespace Cubicle.Systems {
                 var chunk = new Chunk(_graphics) {
                     Position = position
                 };
+
+                GS.BeginMark("Generate Chunk", Color.Green);
                 chunk.Generate();
+                GS.EndMark("Generate Chunk");
 
                 chunks.LoadedChunks.Add(position, chunk);
             }
@@ -46,6 +51,7 @@ namespace Cubicle.Systems {
             }
 
             requester.RequestedChunks.Clear();
+            GS.EndMark("ChunkLoaderSystem");
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <RollForward>Major</RollForward>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>true</TieredCompilation>
@@ -14,10 +14,12 @@
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <FileVersion>0.0.0.1</FileVersion>
     <AssemblyVersion>0.0.0.1</AssemblyVersion>
+    <UseWPF>True</UseWPF>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Apos.Input" Version="2.4.2" />
     <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
+    <PackageReference Include="Gearset.MonoGame.WindowsGL" Version="3.0.7" />
     <PackageReference Include="MonoGame.Extended" Version="3.8.0">
       <ExcludeAssets>contentFiles</ExcludeAssets>
     </PackageReference>
@@ -36,6 +38,10 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);USE_GEARSET</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

@@ -7,6 +7,7 @@ namespace Cubicle.Components {
     }
 
     public class Input {
+        public bool Enabled = true;
         public float Sensitivity = 2.0f;
 
         public KeyState Forward;

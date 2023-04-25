@@ -1,6 +1,8 @@
-﻿using Cubicle.Singletons;
+﻿using Cubicle.Gearset;
+using Cubicle.Singletons;
+using Microsoft.Xna.Framework;
 using System;
-using System.Numerics;
+using Vector3 = System.Numerics.Vector3;
 
 namespace Cubicle.Level {
     public static class Generator {
@@ -27,6 +29,7 @@ namespace Cubicle.Level {
         }
 
         public static void Generate(Chunk chunk) {
+            GS.BeginMark("Generate", Color.Maroon);
             int[,] elevation_map = new int[Chunk.SIZE, Chunk.SIZE];
             Biome[,] biome_data = new Biome[Chunk.SIZE, Chunk.SIZE];
 
@@ -51,6 +54,7 @@ namespace Cubicle.Level {
                     }
                 }
             }
+            GS.EndMark("Generate");
         }
 
         private static int BlockType(int max_y, int y, Biome biome) {

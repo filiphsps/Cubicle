@@ -1,4 +1,5 @@
 ﻿using Cubicle.Components;
+using Cubicle.Gearset;
 using Cubicle.Singletons;
 using Cubicle.Util;
 using Microsoft.Xna.Framework;
@@ -24,6 +25,10 @@ namespace Cubicle.Systems {
         }
 
         public override void Draw(GameTime gameTime) {
+            GS.BeginMark("ChunkRenderSystem", Color.Magenta);
+
+            var chunks_n = 0;
+            var rendered = 0;
             foreach (var entityId in ActiveEntities) {
                 var renderable = _renderableMapper.Get(entityId);
                 var chunks = _chunksMapper.Get(entityId);
@@ -32,9 +37,9 @@ namespace Cubicle.Systems {
                 var direction = renderable.Direction;
                 var cardinal = direction.Cardinal();
 
-                var rendered = 0;
                 foreach (var chunk in chunks.LoadedChunks.Values) {
-                    if (!chunk.Blocks.Any())
+                    chunks_n += 1;
+                    if (!chunk.Blocks.Any() || chunk.VertexCount <= 0)
                         continue;
 
                     var chunk_pos = chunk.Position;
@@ -72,6 +77,9 @@ namespace Cubicle.Systems {
                         pass.Apply();
                         _graphics.DrawPrimitives(PrimitiveType.TriangleList, 0, chunk.VertexCount / 3);
                     }
+
+                    var debug_pos = world_pos + new Vector3(0.5f, 0.5f, 0.5f);
+                    GS.ShowBoxOnce(debug_pos, debug_pos + new Vector3(16, 16, 16), Color.Purple);
                     rendered += 1;
                 }
 
@@ -80,6 +88,9 @@ namespace Cubicle.Systems {
                 DebugManager.Text($"{culled.ToString("0.00")}% Culling", true);
                 DebugManager.Div();
             }
+            GS.Plot("Chunks", chunks_n);
+            GS.Plot("Chunks Culled", chunks_n - rendered);
+            GS.EndMark("ChunkRenderSystem");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Cubicle.Models;
+﻿using Cubicle.Gearset;
+using Cubicle.Models;
 using Cubicle.Rendering;
 using Cubicle.Singletons;
 using Microsoft.Xna.Framework;
@@ -12,6 +13,10 @@ namespace Cubicle.Level {
         public int VertexCount;
 
         public void CalculateMesh() {
+            if (Blocks.Count <= 0)
+                return;
+
+            GS.BeginMark("CalculateMesh", Color.LightYellow);
             bool[] visibleFaces = new bool[6];
 
             foreach (var entry in Blocks) {
@@ -33,6 +38,7 @@ namespace Cubicle.Level {
             VertexList.Clear();
 
             _buffer.SetData(Vertices);
+            GS.EndMark("CalculateMesh");
         }
         void AddFaceMesh(Vector3 position, int face, ushort? texture) {
             AddData(VertexList, face, position, texture);

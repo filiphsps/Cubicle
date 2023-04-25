@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Cubicle.Gearset;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
@@ -46,6 +47,7 @@ namespace Cubicle.Singletons {
         }
 
         public static void EndDraw() {
+            GS.BeginMark("Debug", Color.LightYellow);
             // TODO: Support multilines
             // this could be done by just splitting the string
             // at "\".
@@ -91,6 +93,7 @@ namespace Cubicle.Singletons {
             _spriteBatch.End();
             _primaryText.Clear();
             _secondaryText.Clear();
+            GS.EndMark("Debug");
         }
 
 
