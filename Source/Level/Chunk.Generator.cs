@@ -6,8 +6,22 @@ using Vector3 = System.Numerics.Vector3;
 namespace Cubicle.Level {
     public sealed partial class Chunk {
         public void Generate() {
-            Generator.Generate(this);
+            if (Position.Y != 0)
+                return;
 
+            for (var x = 0; x < SIZE; x++) {
+                for (var y = 0; y < 2; y++) {
+                    for (var z = 0; z < SIZE; z++) {
+                        this[x, y, z] = y == 1 ? BlocksManager.GetBlock("grass") : BlocksManager.GetBlock("dirt");
+                    }
+                }
+            }
+
+#if !USE_GEARSET // TODO: Re-enable at a later stage
+            // Generator.Generate(this);
+#endif
+        }
+        public void GenerateMesh() {
             if (Blocks.Count <= 0)
                 return;
 

@@ -1,5 +1,4 @@
-﻿using Cubicle.Gearset;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
@@ -47,14 +46,15 @@ namespace Cubicle.Singletons {
         }
 
         public static void EndDraw() {
-            GS.BeginMark("Debug", Color.LightYellow);
+            if (_primaryText.Count <= 0) {
+                return;
+
+            }
             // TODO: Support multilines
             // this could be done by just splitting the string
             // at "\".
 
             _primaryText.Insert(0, $"Cubicle {System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}");
-            _primaryText.Insert(2, $"Entities: {_currentWorld.EntityCount}");
-            // TODO: Debug entities
 
             // Primary debug info
             float y = 0;
@@ -89,11 +89,9 @@ namespace Cubicle.Singletons {
                 _spriteBatch.DrawString(Font, text, new Vector2(x - _padding.X / 2, y + 2 + _padding.Y / 2), _foreground);
                 y += size.Y + _padding.Y;
             }
-
-            _spriteBatch.End();
             _primaryText.Clear();
             _secondaryText.Clear();
-            GS.EndMark("Debug");
+            _spriteBatch.End();
         }
 
 

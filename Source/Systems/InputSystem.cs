@@ -1,5 +1,6 @@
 ﻿using Apos.Input;
 using Cubicle.Components;
+using Cubicle.Gearset;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Entities;
@@ -40,6 +41,7 @@ namespace Cubicle.Systems {
         }
 
         public override void Update(GameTime gameTime) {
+            GS.BeginMark("InputSystem", Color.Aqua);
             InputHelper.UpdateSetup();
 
             foreach (var entityId in ActiveEntities) {
@@ -50,7 +52,7 @@ namespace Cubicle.Systems {
                 if (!input.Enabled) {
                     input.MousePointer = new Vector2(currentMouseState.X, currentMouseState.Y);
                     input.LastMousePointer = input.MousePointer;
-                    return;
+                    break;
                 }
 
                 input.Forward = _forward.Held() ? KeyState.Pressed : KeyState.Released;
@@ -78,6 +80,7 @@ namespace Cubicle.Systems {
             }
 
             InputHelper.UpdateCleanup();
+            GS.EndMark("InputSystem");
         }
     }
 }

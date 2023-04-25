@@ -23,7 +23,7 @@ namespace Cubicle.Systems {
         }
 
         public override void Update(GameTime gameTime) {
-            GS.BeginMark("Movement", Color.YellowGreen);
+            GS.BeginMark("MovementSystem", Color.YellowGreen);
             foreach (var entityId in ActiveEntities) {
                 var input = _inputMapper.Get(entityId);
                 var transform = _transformMapper.Get(entityId);
@@ -68,13 +68,15 @@ namespace Cubicle.Systems {
                 transform.Position += delta * speed * position.X * transform.Forward;
                 transform.Position += delta * speed * position.Z * Vector3.Cross(Vector3.UnitY, horizontal);
 
-                DebugManager.Text($"XYZ: {transform.Position.X.ToString("0.0")} / {transform.Position.Y.ToString("0.0")} / {transform.Position.Z.ToString("0.0")}");
+                GS.BeginMark("Movement.Debug", Color.Purple);
+                var pos_formatted = $"{transform.Position.X.ToString("0.0")} / {transform.Position.Y.ToString("0.0")} / {transform.Position.Z.ToString("0.0")}";
                 var block = Block.ToRelative(transform.Position);
                 var chunk = Chunk.ToRelative(transform.Position);
-                DebugManager.Text($"Chunk: {block.X} {block.Y} {block.Z} in {chunk.X} {chunk.Y} {chunk.Z}");
-                DebugManager.Div();
+                var chunk_formatted = $"{block.X} {block.Y} {block.Z} in {chunk.X} {chunk.Y} {chunk.Z}";
+                DebugManager.Text($"XYZ: {pos_formatted}, Chunk: {chunk_formatted}", true);
+                GS.EndMark("Movement.Debug");
             }
-            GS.EndMark("Movement");
+            GS.EndMark("MovementSystem");
         }
     }
 }

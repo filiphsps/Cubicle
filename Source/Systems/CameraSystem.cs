@@ -1,4 +1,5 @@
 ﻿using Cubicle.Components;
+using Cubicle.Gearset;
 using Cubicle.Singletons;
 using Cubicle.Util;
 using Microsoft.Xna.Framework;
@@ -20,6 +21,7 @@ namespace Cubicle.Systems {
         }
 
         public override void Process(GameTime gameTime, int entityId) {
+            GS.BeginMark("CameraSystem", Color.Coral);
             var camera = _cameraMapper.Get(entityId);
             var transform = _transformMapper.Get(entityId);
 
@@ -36,8 +38,9 @@ namespace Cubicle.Systems {
 
             camera.View = Matrix.CreateLookAt(camera.Position, camera.Position + camera.Forward, camera.Up);
 
-            DebugManager.Text($"Direction: {StringHelpers.CardinalToString(camera.Forward.Cardinal())}");
+            DebugManager.Text($"Direction: {StringHelpers.CardinalToString(camera.Forward.Cardinal())}", true);
             DebugManager.Div();
+            GS.EndMark("CameraSystem");
         }
     }
 }

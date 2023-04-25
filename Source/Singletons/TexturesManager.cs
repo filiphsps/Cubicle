@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -41,12 +42,12 @@ namespace Cubicle.Singletons {
 
     public static class TexturesManager {
         private static GraphicsDevice _graphics;
-        public static Dictionary<String, Texture2D> BlockTextures;
-        public static Dictionary<int[], Atlas> ChunkAtlas;
+        public static ConcurrentDictionary<String, Texture2D> BlockTextures;
+        public static ConcurrentDictionary<int[], Atlas> ChunkAtlas;
 
         static TexturesManager() {
-            BlockTextures = new Dictionary<String, Texture2D>();
-            ChunkAtlas = new Dictionary<int[], Atlas>(new IdsArrayComparer());
+            BlockTextures = new ConcurrentDictionary<String, Texture2D>();
+            ChunkAtlas = new ConcurrentDictionary<int[], Atlas>(new IdsArrayComparer());
         }
 
         public static void LoadContent(GraphicsDevice graphics) {
@@ -58,9 +59,30 @@ namespace Cubicle.Singletons {
                 var key = texture.Split('\\')[1].Split('.')[0];
 
                 FileStream stream = new FileStream(texture, FileMode.Open);
-                BlockTextures.Add(key, Texture2D.FromStream(_graphics, stream));
+                // FIXME: Error handling
+                // TODO: Move to FromFile
+                BlockTextures.TryAdd(key, Texture2D.FromStream(_graphics, stream));
                 stream.Dispose();
             }
+
+            // FIXME: Remove this when GetAtlas supports multithreading,
+            //  or we have a good work-around. Texture2D is a blocker.
+            GetAtlas(new List<int>() {
+                BlocksManager.GetBlock("grass"),
+                BlocksManager.GetBlock("dirt"),
+                BlocksManager.GetBlock("border")
+            });
+            GetAtlas(new List<int>() {
+                BlocksManager.GetBlock("grass"),
+                BlocksManager.GetBlock("dirt")
+            });
+            GetAtlas(new List<int>() {
+                BlocksManager.GetBlock("dirt"),
+                BlocksManager.GetBlock("border")
+            });
+            GetAtlas(new List<int>() {
+                BlocksManager.GetBlock("dirt"),
+            });
         }
 
         public static Atlas GetAtlas(List<int> blockIds) {
@@ -73,7 +95,7 @@ namespace Cubicle.Singletons {
             if (ChunkAtlas.ContainsKey(ids))
                 return ChunkAtlas[ids];
 
-            GS.Log($"GetAtlas: MISS - [{String.Join(";", ids)}]");
+            GS.Log("TexturesManager", $"GetAtlas: MISS - [{String.Join(";", ids)}]");
 
             // Figure out which textures to add to the atlas
             // Some blocks may have more than one texture (multiface)
@@ -88,7 +110,7 @@ namespace Cubicle.Singletons {
                 }
             }
 
-            // TODO: Dynamic width & height
+            // TODO: Multiple widths & heights
             var texture = new Texture2D(_graphics, 8, textures_to_add.Count * 8);
             Color[] texture_data = new Color[texture.Width * texture.Height];
 
@@ -130,7 +152,8 @@ namespace Cubicle.Singletons {
                 }
             }
 
-            ChunkAtlas.Add(ids, new Atlas() with {
+            // FIXME: Error handling
+            ChunkAtlas.TryAdd(ids, new Atlas() with {
                 Texture = texture,
                 TexturesCount = texture_indices.Count,
                 BlockIndices = block_indices
