@@ -2,19 +2,4 @@
 
 [![Build and Publish](https://github.com/filiphsps/Cubicle/actions/workflows/build-and-publish.yml/badge.svg?branch=master)](https://github.com/filiphsps/Cubicle/actions/workflows/build-and-publish.yml)
 
-## Credits
-
-### Packages
-
--   [Apos.Input](https://github.com/Apostolique/Apos.Input)
--   [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended)
--   [MonoGame.Extended.Entities](https://github.com/craftworkgames/MonoGame.Extended)
--   [Facepunch.Steamworks](https://github.com/Facepunch/Facepunch.Steamworks)
-
-### Fonts
-
-### Textures
-
-### Models
-
-### Shaders
+A quite dirty POC cubic voxel engine. If work on it is continued the eventual goal is to make it completely multithreaded with the help of ECS.
