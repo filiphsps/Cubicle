@@ -3,8 +3,8 @@ using Cubicle.Gearset;
 using Cubicle.Singletons;
 using Cubicle.Util;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Systems;
+using MonoGame.Extended.ECS;
+using MonoGame.Extended.ECS.Systems;
 
 namespace Cubicle.Systems {
     public class CameraSystem : EntityProcessingSystem {

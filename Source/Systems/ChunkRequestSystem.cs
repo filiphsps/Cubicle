@@ -1,8 +1,8 @@
 using Cubicle.Components;
 using Cubicle.Gearset;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Systems;
+using MonoGame.Extended.ECS;
+using MonoGame.Extended.ECS.Systems;
 using System.Threading;
 using Vector3 = System.Numerics.Vector3;
 

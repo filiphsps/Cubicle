@@ -1,7 +1,7 @@
 ﻿using Cubicle.Singletons;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Systems;
+using MonoGame.Extended.ECS;
+using MonoGame.Extended.ECS.Systems;
 
 namespace Cubicle.Systems.Debug {
     public class DebugPrepareSystem : DrawSystem {
