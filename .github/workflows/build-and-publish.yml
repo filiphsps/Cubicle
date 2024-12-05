@@ -27,7 +27,7 @@ jobs:
             - name: Build
               run: dotnet build --configuration Release --no-restore
 
-            - uses: actions/upload-artifact@v2
+            - uses: actions/upload-artifact@v4
               with:
                   name: win64
                   path: bin/Release/net7.0-windows
@@ -43,7 +43,7 @@ jobs:
                   fetch-depth: 0
 
             - name: Download win64 Artifact
-              uses: actions/download-artifact@v2
+              uses: actions/download-artifact@v4
               with:
                   name: win64
                   path: bin/Release/net7.0-windows
