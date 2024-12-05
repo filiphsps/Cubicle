@@ -7,7 +7,7 @@ jobs:
         runs-on: windows-latest
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - name: Cache
               uses: actions/cache@v3
               with:
@@ -38,7 +38,7 @@ jobs:
         if: github.ref == 'refs/heads/master'
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
               with:
                   fetch-depth: 0
 
