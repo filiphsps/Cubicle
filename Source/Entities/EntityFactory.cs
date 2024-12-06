@@ -1,7 +1,7 @@
 ﻿using Cubicle.Components;
 using Cubicle.Gearset;
 using Cubicle.Level;
-using MonoGame.Extended.Entities;
+using MonoGame.Extended.ECS;
 using Vector3 = System.Numerics.Vector3;
 
 namespace Cubicle.Entities {

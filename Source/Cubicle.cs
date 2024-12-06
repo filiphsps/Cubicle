@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Entities;
+using MonoGame.Extended.ECS;
 using Steamworks;
 using System;
 using System.Diagnostics;
@@ -210,7 +210,7 @@ namespace Cubicle {
             base.OnDeactivated(game, args);
         }
 
-        protected override void OnExiting(Object game, EventArgs args) {
+        protected override void OnExiting(Object game, ExitingEventArgs args) {
             SteamClient.Shutdown();
             base.OnExiting(game, args);
             GS.Shutdown(this);

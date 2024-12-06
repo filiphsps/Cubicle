@@ -1,7 +1,7 @@
 ﻿using Cubicle.Gearset;
 using Cubicle.Singletons;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities.Systems;
+using MonoGame.Extended.ECS.Systems;
 using Steamworks;
 
 namespace Cubicle.Systems {
