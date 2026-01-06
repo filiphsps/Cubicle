@@ -17,7 +17,7 @@
     <UseWPF>True</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Apos.Input" Version="2.4.2" />
+    <PackageReference Include="Apos.Input" Version="2.5.0" />
     <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
     <PackageReference Include="Gearset.MonoGame.WindowsGL" Version="3.0.7" />
     <PackageReference Include="MonoGame.Extended" Version="3.8.0">
